@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spinquanta</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #fff;
+      font-family: sans-serif;
+    }
+
+    .header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1a1a1a;
+    }
+
+    .balance {
+      font-size: 1rem;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .case {
+      background-color: #222;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+
+    .case:hover {
+      background-color: #2a2a2a;
+    }
+
+    .case-title {
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .case-price {
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      color: #ccc;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>Spinquanta</div>
+    <div class="balance">0.00 TON</div>
+  </div>
+
+  <div class="case-grid">
+    <div class="case">
+      <div class="case-title">FREE CASE</div>
+      <div class="case-price">0 TON</div>
+    </div>
+    <div class="case">
+      <div class="case-title">10 TON</div>
+      <div class="case-price">Basic</div>
+    </div>
+    <div class="case">
+      <div class="case-title">50 TON</div>
+      <div class="case-price">Epic</div>
+    </div>
+    <div class="case">
+      <div class="case-title">100 TON</div>
+      <div class="case-price">Legendary</div>
+    </div>
+    <div class="case">
+      <div class="case-title">500 TON</div>
+      <div class="case-price">Ultra</div>
+    </div>
+    <div class="case">
+      <div class="case-title">1000 TON</div>
+      <div class="case-price">Mythical</div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item">Main</div>
+    <div class="nav-item">Weekly</div>
+    <div class="nav-item">Jackpot</div>
+    <div class="nav-item">Upgrade</div>
+    <div class="nav-item">Profile</div>
+  </div>
+</body>
+</html>
+
