@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT Casino Bot</title>
+    <title>SpinQuanta</title>
     <style>
         * {
             margin: 0;
@@ -444,7 +444,7 @@
                         <span>TON</span>
                     </div>
                     <button class="spin-btn" id="spinBtn" onclick="spinRoulette()">
-                        🎲 Крутити рулетку
+                        Spin
                     </button>
                 </div>
             </div>
@@ -457,19 +457,19 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="totalCases">0</div>
-                        <div class="stat-label">Кейсів відкрито</div>
+                        <div class="stat-label">Cases Open</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="totalWins">0</div>
-                        <div class="stat-label">Виграшів</div>
+                        <div class="stat-label">Winnings</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="totalSpent">0 TON</div>
-                        <div class="stat-label">Витрачено</div>
+                        <div class="stat-label">Stained</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="totalWon">0 TON</div>
-                        <div class="stat-label">Виграно</div>
+                        <div class="stat-label">won</div>
                     </div>
                 </div>
             </div>
@@ -477,16 +477,13 @@
 
         <div class="bottom-nav">
             <div class="nav-item active" onclick="showTab('home')">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">Головна</span>
+                <span class="nav-label">Home</span>
             </div>
             <div class="nav-item" onclick="showTab('roulette')">
-                <span class="nav-icon">🎯</span>
-                <span class="nav-label">Рулетка</span>
+                <span class="nav-label">Rulet</span>
             </div>
             <div class="nav-item" onclick="showTab('profile')">
-                <span class="nav-icon">👤</span>
-                <span class="nav-label">Профіль</span>
+                <span class="nav-label">Profile</span>
             </div>
         </div>
     </div>
@@ -495,14 +492,14 @@
     <div class="deposit-modal" id="depositModal">
         <div class="deposit-content">
             <button class="close-modal" onclick="closeDepositModal()">×</button>
-            <h2>💰 Поповнення балансу</h2>
-            <p>Надішліть TON на адресу:</p>
+            <h2>Deposit</h2>
+            <p>Send on this ton addres:</p>
             <div class="ton-address" id="tonAddress">
-                UQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG
+                UQDx5LBGp7K7A5hrYu4y6W5RPO4hwk5fL_LWzov0FlYeJMMp
             </div>
-            <button class="copy-btn" onclick="copyAddress()">📋 Копіювати адресу</button>
+            <button class="copy-btn" onclick="copyAddress()">copy</button>
             <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
-                Після надсилання баланс оновиться автоматично протягом 1-2 хвилин
+                After sending, the balance will be updated automatically within 1-2 minutes.
             </p>
         </div>
     </div>
@@ -518,12 +515,12 @@
         let totalWon = parseFloat(localStorage.getItem('totalWon') || '0');
 
         const nftRewards = [
-            { name: '🎨 Art NFT', rarity: 'common', value: 0.05 },
-            { name: '🎮 Game Item', rarity: 'common', value: 0.1 },
-            { name: '🎭 Avatar NFT', rarity: 'uncommon', value: 0.25 },
-            { name: '🏆 Trophy NFT', rarity: 'rare', value: 0.5 },
-            { name: '💎 Diamond NFT', rarity: 'epic', value: 1.0 },
-            { name: '👑 Legendary NFT', rarity: 'legendary', value: 2.0 }
+            { name: 'star pack', rarity: 'common', value: 0.05 },
+            { name: 'stars gift', rarity: 'common', value: 0.1 },
+            { name: 'basic NFT', rarity: 'uncommon', value: 0.25 },
+            { name: 'Trophy NFT', rarity: 'rare', value: 0.5 },
+            { name: ' Diamond NFT', rarity: 'epic', value: 1.0 },
+            { name: 'watch NFT', rarity: 'legendary', value: 2.0 }
         ];
 
         function updateDisplay() {
@@ -565,7 +562,7 @@
             totalSpent += price;
 
             // Simulate case opening
-            const isWin = Math.random() < 0.7; // 70% win chance
+            const isWin = Math.random() < 0.3; // 70% win chance
             
             if (isWin) {
                 const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
@@ -661,7 +658,7 @@
         function copyAddress() {
             const address = document.getElementById('tonAddress').textContent;
             navigator.clipboard.writeText(address).then(() => {
-                showNotification('📋 Адресу скопійовано!');
+                showNotification('Addres copied!');
             });
         }
 
@@ -672,7 +669,7 @@
                 balance += deposit;
                 saveData();
                 updateDisplay();
-                showNotification(`💰 Баланс поповнено: +${deposit.toFixed(2)} TON`);
+                showNotification(`Deposit successful!: +${deposit.toFixed(2)} TON`);
             }
         }, 5000);
 
