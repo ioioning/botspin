@@ -1,682 +1,4 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpinQuanta</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            position: relative;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            padding: 1rem;
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .balance {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .balance-amount {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .deposit-btn {
-            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
-            color: #000;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .deposit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .tabs {
-            display: flex;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            margin: 1rem;
-            padding: 0.25rem;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 0.75rem;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .tab.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .content {
-            padding: 0 1rem;
-        }
-
-        .cases-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .case-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .case-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .case-card.free {
-            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 200, 0, 0.05) 100%);
-            border-color: rgba(0, 255, 0, 0.3);
-        }
-
-        .case-card.premium {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.05) 100%);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-
-        .case-icon {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .case-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .case-price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .roulette-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .roulette-wheel {
-            width: 200px;
-            height: 200px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            margin: 1rem auto;
-            position: relative;
-            background: conic-gradient(
-                from 0deg,
-                #ff0000 0deg 60deg,
-                #000000 60deg 120deg,
-                #ff0000 120deg 180deg,
-                #000000 180deg 240deg,
-                #ff0000 240deg 300deg,
-                #000000 300deg 360deg
-            );
-            transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .roulette-pointer {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid white;
-        }
-
-        .spin-btn {
-            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
-            color: #000;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-        }
-
-        .spin-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
-        }
-
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .profile-section {
-            display: none;
-            padding: 1rem;
-        }
-
-        .profile-section.active {
-            display: block;
-        }
-
-        .profile-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 400px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            padding: 1rem;
-        }
-
-        .nav-item {
-            flex: 1;
-            text-align: center;
-            padding: 0.5rem;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.25rem;
-            display: block;
-        }
-
-        .nav-label {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
-        .deposit-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .deposit-modal.active {
-            display: flex;
-        }
-
-        .deposit-content {
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 320px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .ton-address {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            word-break: break-all;
-            font-family: monospace;
-        }
-
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 0.5rem;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 1001;
-            display: none;
-        }
-
-        .home-section.active, .roulette-content.active {
-            display: block;
-        }
-
-        .home-section, .roulette-content {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>NFT Casino</h1>
-            <div class="balance">
-                <span>Balance: <span class="balance-amount" id="balance">0.00 TON</span></span>
-                <button class="deposit-btn" onclick="openDepositModal()">Deposit</button>
-            </div>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active" onclick="showSection('home')">Case</div>
-            <div class="tab" onclick="showSection('roulette')">Rulet</div>
-        </div>
-
-        <div class="content">
-            <div class="home-section active" id="homeSection">
-                <div class="cases-grid">
-                    <div class="case-card free" onclick="openCase('free')">
-                        <span class="case-icon"></span>
-                        <div class="case-name">Free Case</div>
-                        <div class="case-price">for free</div>
-                    </div>
-                    
-                    <div class="case-card" onclick="openCase('basic')">
-                        <div class="case-name">Basic Case</div>
-                        <div class="case-price">0.1 TON</div>
-                    </div>
-                    
-                    <div class="case-card" onclick="openCase('premium')">
-                        <div class="case-name">Premium Case</div>
-                        <div class="case-price">0.5 TON</div>
-                    </div>
-                    
-                    <div class="case-card premium" onclick="openCase('legendary')">
-                        <div class="case-name">Legendary Case</div>
-                        <div class="case-price">1.0 TON</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="roulette-content" id="rouletteSection">
-                <div class="roulette-section">
-                    <h2>Rulet</h2>
-                    <div class="roulette-wheel" id="rouletteWheel">
-                        <div class="roulette-pointer"></div>
-                    </div>
-                    <div>
-                        <label>Your Bet: </label>
-                        <input type="number" id="betAmount" min="0.01" step="0.01" value="0.1" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.5rem; border-radius: 5px; margin: 0 0.5rem;">
-                        <span>TON</span>
-                    </div>
-                    <button class="spin-btn" id="spinBtn" onclick="spinRoulette()">
-                        Spin
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile-section" id="profileSection">
-            <div class="profile-card">
-                <div class="avatar">👤</div>
-                <h2 id="username">@username</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalCases">0</div>
-                        <div class="stat-label">Cases Open</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalWins">0</div>
-                        <div class="stat-label">Winnings</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalSpent">0 TON</div>
-                        <div class="stat-label">Stained</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalWon">0 TON</div>
-                        <div class="stat-label">won</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="showTab('home')">
-                <span class="nav-label">Home</span>
-            </div>
-            <div class="nav-item" onclick="showTab('roulette')">
-                <span class="nav-label">Rulet</span>
-            </div>
-            <div class="nav-item" onclick="showTab('profile')">
-                <span class="nav-label">Profile</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Deposit Modal -->
-    <div class="deposit-modal" id="depositModal">
-        <div class="deposit-content">
-            <button class="close-modal" onclick="closeDepositModal()">×</button>
-            <h2>Deposit</h2>
-            <p>Send on this ton addres:</p>
-            <div class="ton-address" id="tonAddress">
-                UQDx5LBGp7K7A5hrYu4y6W5RPO4hwk5fL_LWzov0FlYeJMMp
-            </div>
-            <button class="copy-btn" onclick="copyAddress()">copy</button>
-            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
-                After sending, the balance will be updated automatically within 1-2 minutes.
-            </p>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div class="notification" id="notification"></div>
-
-    <script>
-        let balance = parseFloat(localStorage.getItem('balance') || '0');
-        let totalCases = parseInt(localStorage.getItem('totalCases') || '0');
-        let totalWins = parseInt(localStorage.getItem('totalWins') || '0');
-        let totalSpent = parseFloat(localStorage.getItem('totalSpent') || '0');
-        let totalWon = parseFloat(localStorage.getItem('totalWon') || '0');
-
-        const nftRewards = [
-            { name: 'star pack', rarity: 'common', value: 0.05 },
-            { name: 'stars gift', rarity: 'common', value: 0.1 },
-            { name: 'basic NFT', rarity: 'uncommon', value: 0.25 },
-            { name: 'Trophy NFT', rarity: 'rare', value: 0.5 },
-            { name: ' Diamond NFT', rarity: 'epic', value: 1.0 },
-            { name: 'watch NFT', rarity: 'legendary', value: 2.0 }
-        ];
-
-        function updateDisplay() {
-            document.getElementById('balance').textContent = `${balance.toFixed(2)} TON`;
-            document.getElementById('totalCases').textContent = totalCases;
-            document.getElementById('totalWins').textContent = totalWins;
-            document.getElementById('totalSpent').textContent = `${totalSpent.toFixed(2)} TON`;
-            document.getElementById('totalWon').textContent = `${totalWon.toFixed(2)} TON`;
-        }
-
-        function saveData() {
-            localStorage.setItem('balance', balance.toString());
-            localStorage.setItem('totalCases', totalCases.toString());
-            localStorage.setItem('totalWins', totalWins.toString());
-            localStorage.setItem('totalSpent', totalSpent.toString());
-            localStorage.setItem('totalWon', totalWon.toString());
-        }
-
-        function showNotification(message, duration = 3000) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, duration);
-        }
-
-        function openCase(type) {
-            const prices = { free: 0, basic: 0.1, premium: 0.5, legendary: 1.0 };
-            const price = prices[type];
-
-            if (balance < price) {
-                showNotification('Not enoght! Top up your balance.');
-                return;
-            }
-
-            balance -= price;
-            totalCases++;
-            totalSpent += price;
-
-            // Simulate case opening
-            const isWin = Math.random() < 0.3; // 70% win chance
-            
-            if (isWin) {
-                const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
-                totalWins++;
-                totalWon += reward.value;
-                balance += reward.value;
-                showNotification(`You won!: ${reward.name}! (+${reward.value} TON)`);
-            } else {
-                showNotification('You win 1 star. Congratulations!');
-            }
-
-            saveData();
-            updateDisplay();
-        }
-
-        function spinRoulette() {
-            const betAmount = parseFloat(document.getElementById('betAmount').value);
-            
-            if (balance < betAmount) {
-                showNotification('not enought balance!');
-                return;
-            }
-
-            const spinBtn = document.getElementById('spinBtn');
-            const wheel = document.getElementById('rouletteWheel');
-            
-            spinBtn.disabled = true;
-            balance -= betAmount;
-            totalSpent += betAmount;
-
-            // Random spin
-            const spins = 5 + Math.random() * 5;
-            const finalRotation = spins * 360;
-            wheel.style.transform = `rotate(${finalRotation}deg)`;
-
-            setTimeout(() => {
-                const isWin = Math.random() < 0.48; // Slightly less than 50% to account for house edge
-                
-                if (isWin) {
-                    const winAmount = betAmount * 2;
-                    balance += winAmount;
-                    totalWins++;
-                    totalWon += winAmount;
-                    showNotification(`you won! +${winAmount.toFixed(2)} TON`);
-                } else {
-                    showNotification('fail. try again!');
-                }
-
-                saveData();
-                updateDisplay();
-                spinBtn.disabled = false;
-            }, 3000);
-        }
-
-        function showSection(section) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.home-section, .roulette-content').forEach(s => s.classList.remove('active'));
-            
-            if (section === 'home') {
-                document.querySelector('.tab').classList.add('active');
-                document.getElementById('homeSection').classList.add('active');
-            } else if (section === 'roulette') {
-                document.querySelectorAll('.tab')[1].classList.add('active');
-                document.getElementById('rouletteSection').classList.add('active');
-            }
-        }
-
-        function showTab(tab) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.home-section, .roulette-content, .profile-section').forEach(s => s.classList.remove('active'));
-            
-            event.target.closest('.nav-item').classList.add('active');
-            
-            if (tab === 'home') {
-                document.getElementById('homeSection').classList.add('active');
-                showSection('home');
-            } else if (tab === 'roulette') {
-                document.getElementById('rouletteSection').classList.add('active');
-                showSection('roulette');
-            } else if (tab === 'profile') {
-                document.getElementById('profileSection').classList.add('active');
-            }
-        }
-
-        function openDepositModal() {
-            document.getElementById('depositModal').classList.add('active');
-        }
-
-        function closeDepositModal() {
-            document.getElementById('depositModal').classList.remove('active');
-        }
-
-        function copyAddress() {
-            const address = document.getElementById('tonAddress').textContent;
-            navigator.clipboard.writeText(address).then(() => {
-                showNotification('Addres copied!');
-            });
-        }
-
-        // Simulate periodic balance updates (in real app this would be from blockchain monitoring)
-        setInterval(() => {
-            if (Math.random() < 0.1) { // 10% chance every 5 seconds
-                const deposit = Math.random() * 2 + 0.1;
-                balance += deposit;
-                saveData();
-                updateDisplay();
-                showNotification(`Deposit successful!: +${deposit.toFixed(2)} TON`);
-            }
-        }, 5000);
-
-        // Initialize
-        updateDisplay();
-    </script>
-    <!-- Додати цей код перед закриваючим </body> тегом -->
+<!-- Додати цей код перед закриваючим </body> тегом -->
 
 <!-- Garage Section -->
 <div class="garage-section" id="garageSection">
@@ -687,7 +9,7 @@
             <span>Поінтс: <span id="totalPoints">11350</span></span>
         </div>
     </div>
-
+    
     <div class="cars-grid">
         <div class="car-card available" onclick="buyCar('tonkeepe')">
             <div class="car-multiplier">X1.2</div>
@@ -743,7 +65,32 @@
     </div>
 </div>
 
-<!-- Inventory Section -->
+<!-- Case Preview Modal -->
+<div class="case-preview-modal" id="casePreviewModal">
+    <div class="case-preview-content">
+        <button class="close-modal" onclick="closeCasePreview()">×</button>
+        <div class="case-preview-header">
+            <div class="case-preview-title" id="previewCaseTitle">Free Case</div>
+            <div class="case-preview-price" id="previewCasePrice">Free</div>
+        </div>
+        
+        <div class="prizes-title">Possible prizes:</div>
+        <div class="prizes-grid" id="prizesGrid">
+            <!-- Prizes will be populated by JavaScript -->
+        </div>
+        
+        <div class="modal-actions">
+            <button class="open-case-btn" id="openCaseBtn" onclick="openCaseFromPreview()">
+                Open Case
+            </button>
+            <button class="cancel-btn" onclick="closeCasePreview()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Inventory Styles -->
 <div class="inventory-section" id="inventorySection">
     <div class="inventory-header">
         <h2>🎒 Інвентар</h2>
@@ -821,6 +168,8 @@
 .cars-grid {
     display: grid;
     gap: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .car-card {
@@ -955,7 +304,176 @@
     font-weight: bold;
 }
 
-/* Inventory Styles */
+/* Case Preview Modal */
+.case-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.case-preview-modal.active {
+    display: flex;
+}
+
+.case-preview-content {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 350px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: center;
+    position: relative;
+}
+
+.case-preview-header {
+    margin-bottom: 1.5rem;
+}
+
+.case-preview-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.case-preview-price {
+    font-size: 1.1rem;
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.prizes-title {
+    margin: 1.5rem 0 1rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.prizes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.prize-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.prize-item:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.prize-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.prize-name {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.prize-value {
+    font-size: 0.7rem;
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.prize-rarity {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    margin-top: 0.25rem;
+    display: inline-block;
+}
+
+.rarity-common {
+    background: rgba(128, 128, 128, 0.3);
+    color: #c0c0c0;
+}
+
+.rarity-uncommon {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+}
+
+.rarity-rare {
+    background: rgba(0, 150, 255, 0.2);
+    color: #0096ff;
+}
+
+.rarity-epic {
+    background: rgba(128, 0, 128, 0.2);
+    color: #ff00ff;
+}
+
+.rarity-legendary {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.open-case-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    color: #000;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.open-case-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+.open-case-btn:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 .inventory-section {
     display: none;
     padding: 1rem;
@@ -1061,12 +579,87 @@ let ownedNfts = JSON.parse(localStorage.getItem('ownedNfts') || '[]');
 let totalPoints = parseInt(localStorage.getItem('totalPoints') || '11350');
 let starsCount = parseInt(localStorage.getItem('starsCount') || '245');
 let starPacksCount = parseInt(localStorage.getItem('starPacksCount') || '12');
+let currentPreviewCase = null;
 
 const cars = {
     tonkeepe: { name: 'Tonkeepe-R 34', price: 0.5, rarity: 'uncommon', multiplier: 1.2, icon: '🏎️' },
     ai46: { name: 'Car AI46', price: 1.2, rarity: 'rare', multiplier: 1.5, icon: '🚙' },
     speedster: { name: 'Speed Demon', price: 2.5, rarity: 'epic', multiplier: 2.0, icon: '🏁' }
 };
+
+const casePrizes = {
+    free: [
+        { name: 'Star Pack', icon: '⭐', value: 0.05, rarity: 'common' },
+        { name: 'Stars Gift', icon: '🎁', value: 0.1, rarity: 'common' },
+        { name: 'Basic NFT', icon: '🎨', value: 0.25, rarity: 'uncommon' }
+    ],
+    basic: [
+        { name: 'Star Pack', icon: '⭐', value: 0.05, rarity: 'common' },
+        { name: 'Stars Gift', icon: '🎁', value: 0.1, rarity: 'common' },
+        { name: 'Basic NFT', icon: '🎨', value: 0.25, rarity: 'uncommon' },
+        { name: 'Trophy NFT', icon: '🏆', value: 0.5, rarity: 'rare' }
+    ],
+    premium: [
+        { name: 'Basic NFT', icon: '🎨', value: 0.25, rarity: 'uncommon' },
+        { name: 'Trophy NFT', icon: '🏆', value: 0.5, rarity: 'rare' },
+        { name: 'Diamond NFT', icon: '💎', value: 1.0, rarity: 'epic' },
+        { name: 'Crown NFT', icon: '👑', value: 1.5, rarity: 'epic' }
+    ],
+    legendary: [
+        { name: 'Trophy NFT', icon: '🏆', value: 0.5, rarity: 'rare' },
+        { name: 'Diamond NFT', icon: '💎', value: 1.0, rarity: 'epic' },
+        { name: 'Crown NFT', icon: '👑', value: 1.5, rarity: 'epic' },
+        { name: 'Golden Watch', icon: '⌚', value: 2.0, rarity: 'legendary' },
+        { name: 'Legendary Gem', icon: '💍', value: 3.0, rarity: 'legendary' }
+    ]
+};
+
+function showCasePreview(caseType) {
+    currentPreviewCase = caseType;
+    const prices = { free: 0, basic: 0.1, premium: 0.5, legendary: 1.0 };
+    const priceTexts = { free: 'Free', basic: '0.1 TON', premium: '0.5 TON', legendary: '1.0 TON' };
+    const titles = { free: 'Free Case', basic: 'Basic Case', premium: 'Premium Case', legendary: 'Legendary Case' };
+    
+    document.getElementById('previewCaseTitle').textContent = titles[caseType];
+    document.getElementById('previewCasePrice').textContent = priceTexts[caseType];
+    
+    const prizesGrid = document.getElementById('prizesGrid');
+    const prizes = casePrizes[caseType];
+    
+    prizesGrid.innerHTML = prizes.map(prize => `
+        <div class="prize-item">
+            <span class="prize-icon">${prize.icon}</span>
+            <div class="prize-name">${prize.name}</div>
+            <div class="prize-value">${prize.value} TON</div>
+            <div class="prize-rarity rarity-${prize.rarity}">${prize.rarity}</div>
+        </div>
+    `).join('');
+    
+    const openBtn = document.getElementById('openCaseBtn');
+    const price = prices[caseType];
+    
+    if (balance < price) {
+        openBtn.disabled = true;
+        openBtn.textContent = 'Not enough funds';
+    } else {
+        openBtn.disabled = false;
+        openBtn.textContent = 'Open Case';
+    }
+    
+    document.getElementById('casePreviewModal').classList.add('active');
+}
+
+function closeCasePreview() {
+    document.getElementById('casePreviewModal').classList.remove('active');
+    currentPreviewCase = null;
+}
+
+function openCaseFromPreview() {
+    if (currentPreviewCase) {
+        openCase(currentPreviewCase);
+        closeCasePreview();
+    }
+}
 
 function buyCar(carId) {
     const car = cars[carId];
@@ -1102,7 +695,7 @@ function buyCar(carId) {
 function showInventoryTab(tab) {
     document.querySelectorAll('.inv-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.inventory-tab-content').forEach(c => c.classList.remove('active'));
-
+    
     event.target.classList.add('active');
     document.getElementById(`inv${tab.charAt(0).toUpperCase() + tab.slice(1)}Tab`).classList.add('active');
 }
@@ -1142,7 +735,7 @@ function updateInventoryDisplay() {
     } else {
         nftsContainer.innerHTML = ownedNfts.map(nft => `
             <div class="inventory-item">
-                <div class="item-icon">🎨</div>
+                <div class="item-icon">${nft.icon || '🎨'}</div>
                 <div class="item-name">${nft.name}</div>
                 <div class="car-rarity ${nft.rarity}">${nft.rarity}</div>
                 <div class="item-count">${nft.value} TON</div>
@@ -1168,16 +761,13 @@ function saveCarData() {
 // Модифікувати функцію showTab
 function showTab(tab) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    document.querySelectorAll('.home-section, .roulette-content, .profile-section, .garage-section, .inventory-section').forEach(s => s.classList.remove('active'));
-
+    document.querySelectorAll('.home-section, .profile-section, .garage-section, .inventory-section').forEach(s => s.classList.remove('active'));
+    
     event.target.closest('.nav-item').classList.add('active');
-
+    
     if (tab === 'home') {
         document.getElementById('homeSection').classList.add('active');
         showSection('home');
-    } else if (tab === 'roulette') {
-        document.getElementById('rouletteSection').classList.add('active');
-        showSection('roulette');
     } else if (tab === 'profile') {
         document.getElementById('profileSection').classList.add('active');
     } else if (tab === 'garage') {
@@ -1203,24 +793,26 @@ function openCase(type) {
     totalCases++;
     totalSpent += price;
 
-    const isWin = Math.random() < 0.3;
-
+    const isWin = Math.random() < 0.7; // 70% win chance
+    
     if (isWin) {
-        const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
+        const prizes = casePrizes[type];
+        const reward = prizes[Math.floor(Math.random() * prizes.length)];
         totalWins++;
         totalWon += reward.value;
         balance += reward.value;
-
+        
         // Додати NFT в інвентар
         ownedNfts.push({
             id: Date.now(),
             name: reward.name,
             rarity: reward.rarity,
             value: reward.value,
+            icon: reward.icon,
             obtainedDate: new Date().toISOString()
         });
-
-        showNotification(`Ви виграли!: ${reward.name}! (+${reward.value} TON)`);
+        
+        showNotification(`Ви виграли: ${reward.name}! (+${reward.value} TON)`);
     } else {
         starsCount += 1;
         showNotification('Ви виграли 1 зірку. Вітаємо!');
@@ -1249,13 +841,9 @@ document.querySelector('.bottom-nav').innerHTML = `
     <div class="nav-item" onclick="showTab('inventory')">
         <span class="nav-label">Інвентар</span>
     </div>
-    <div class="nav-item" onclick="showTab('roulette')">
-        <span class="nav-label">Rulet</span>
-    </div>
+
     <div class="nav-item" onclick="showTab('profile')">
         <span class="nav-label">Profile</span>
     </div>
 `;
 </script>
-</body>
-</html>
