@@ -675,7 +675,8 @@
 
         // Initialize
         updateDisplay();
-<!-- Додати цей код перед закриваючим </body> тегом -->
+    </script>
+    <!-- Додати цей код перед закриваючим </body> тегом -->
 
 <!-- Garage Section -->
 <div class="garage-section" id="garageSection">
@@ -686,7 +687,7 @@
             <span>Поінтс: <span id="totalPoints">11350</span></span>
         </div>
     </div>
-    
+
     <div class="cars-grid">
         <div class="car-card available" onclick="buyCar('tonkeepe')">
             <div class="car-multiplier">X1.2</div>
@@ -1101,7 +1102,7 @@ function buyCar(carId) {
 function showInventoryTab(tab) {
     document.querySelectorAll('.inv-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.inventory-tab-content').forEach(c => c.classList.remove('active'));
-    
+
     event.target.classList.add('active');
     document.getElementById(`inv${tab.charAt(0).toUpperCase() + tab.slice(1)}Tab`).classList.add('active');
 }
@@ -1168,9 +1169,9 @@ function saveCarData() {
 function showTab(tab) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     document.querySelectorAll('.home-section, .roulette-content, .profile-section, .garage-section, .inventory-section').forEach(s => s.classList.remove('active'));
-    
+
     event.target.closest('.nav-item').classList.add('active');
-    
+
     if (tab === 'home') {
         document.getElementById('homeSection').classList.add('active');
         showSection('home');
@@ -1203,13 +1204,13 @@ function openCase(type) {
     totalSpent += price;
 
     const isWin = Math.random() < 0.3;
-    
+
     if (isWin) {
         const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
         totalWins++;
         totalWon += reward.value;
         balance += reward.value;
-        
+
         // Додати NFT в інвентар
         ownedNfts.push({
             id: Date.now(),
@@ -1218,7 +1219,7 @@ function openCase(type) {
             value: reward.value,
             obtainedDate: new Date().toISOString()
         });
-        
+
         showNotification(`Ви виграли!: ${reward.name}! (+${reward.value} TON)`);
     } else {
         starsCount += 1;
@@ -1256,6 +1257,5 @@ document.querySelector('.bottom-nav').innerHTML = `
     </div>
 `;
 </script>
-    </script>
 </body>
 </html>
