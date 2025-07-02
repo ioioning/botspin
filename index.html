@@ -675,6 +675,587 @@
 
         // Initialize
         updateDisplay();
+<!-- Додати цей код перед закриваючим </body> тегом -->
+
+<!-- Garage Section -->
+<div class="garage-section" id="garageSection">
+    <div class="garage-header">
+        <h2>🚗 Гараж</h2>
+        <div class="garage-stats">
+            <span>Машин: <span id="totalCars">0</span></span>
+            <span>Поінтс: <span id="totalPoints">11350</span></span>
+        </div>
+    </div>
+    
+    <div class="cars-grid">
+        <div class="car-card available" onclick="buyCar('tonkeepe')">
+            <div class="car-multiplier">X1.2</div>
+            <div class="car-image">🏎️</div>
+            <div class="car-info">
+                <h3>Tonkeepe-R 34</h3>
+                <div class="car-rarity uncommon">Uncommon</div>
+                <p>Баланс технологій та божевільного контролю</p>
+                <div class="car-price">0.5 TON</div>
+            </div>
+            <button class="get-btn">GET</button>
+        </div>
+
+        <div class="car-card available" onclick="buyCar('ai46')">
+            <div class="car-multiplier">X1.5</div>
+            <div class="car-reward">⭐ 200,000 PTS</div>
+            <div class="car-image">🚙</div>
+            <div class="car-info">
+                <h3>Car AI46</h3>
+                <div class="car-rarity rare">Rare</div>
+                <p>AI46 автомобіль спритний з точним управлінням</p>
+                <div class="car-price">1.2 TON</div>
+            </div>
+            <button class="get-btn">GET</button>
+            <div class="new-badge">NEW</div>
+        </div>
+
+        <div class="car-card available" onclick="buyCar('speedster')">
+            <div class="car-multiplier">X2.0</div>
+            <div class="car-reward">⭐ 10,000 Stars</div>
+            <div class="car-image">🏁</div>
+            <div class="car-info">
+                <h3>Speed Demon</h3>
+                <div class="car-rarity epic">Epic</div>
+                <p>Найшвидший автомобіль в колекції</p>
+                <div class="car-price">2.5 TON</div>
+            </div>
+            <button class="get-btn">GET</button>
+            <div class="new-badge">NEW</div>
+        </div>
+
+        <div class="car-card locked">
+            <div class="car-multiplier">X3.0</div>
+            <div class="car-image">🔒</div>
+            <div class="car-info">
+                <h3>Legendary Beast</h3>
+                <div class="car-rarity legendary">Legendary</div>
+                <p>Розблокується на 50 рівні</p>
+                <div class="car-price">5.0 TON</div>
+            </div>
+            <button class="get-btn locked-btn">LOCKED</button>
+        </div>
+    </div>
+</div>
+
+<!-- Inventory Section -->
+<div class="inventory-section" id="inventorySection">
+    <div class="inventory-header">
+        <h2>🎒 Інвентар</h2>
+        <div class="inventory-tabs">
+            <div class="inv-tab active" onclick="showInventoryTab('cars')">Машини</div>
+            <div class="inv-tab" onclick="showInventoryTab('nfts')">NFT</div>
+            <div class="inv-tab" onclick="showInventoryTab('items')">Предмети</div>
+        </div>
+    </div>
+
+    <div class="inventory-content">
+        <div class="inventory-tab-content active" id="invCarsTab">
+            <div class="inventory-grid" id="ownedCars">
+                <div class="inventory-item empty">
+                    <div class="empty-icon">📦</div>
+                    <p>Немає машин</p>
+                    <small>Купіть машини в гаражі</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventory-tab-content" id="invNftsTab">
+            <div class="inventory-grid" id="ownedNfts">
+                <div class="inventory-item empty">
+                    <div class="empty-icon">🎨</div>
+                    <p>Немає NFT</p>
+                    <small>Відкрийте кейси для отримання NFT</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventory-tab-content" id="invItemsTab">
+            <div class="inventory-grid">
+                <div class="inventory-item">
+                    <div class="item-icon">⭐</div>
+                    <div class="item-name">Stars</div>
+                    <div class="item-count" id="starsCount">245</div>
+                </div>
+                <div class="inventory-item">
+                    <div class="item-icon">🎁</div>
+                    <div class="item-name">Star Packs</div>
+                    <div class="item-count" id="starPacksCount">12</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Garage Styles */
+.garage-section {
+    display: none;
+    padding: 1rem;
+}
+
+.garage-section.active {
+    display: block;
+}
+
+.garage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.garage-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.cars-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.car-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.car-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.car-multiplier {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.car-reward {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    color: #000;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.car-image {
+    font-size: 4rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.car-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.car-rarity {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.car-rarity.uncommon {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+}
+
+.car-rarity.rare {
+    background: rgba(0, 150, 255, 0.2);
+    color: #0096ff;
+}
+
+.car-rarity.epic {
+    background: rgba(128, 0, 128, 0.2);
+    color: #ff00ff;
+}
+
+.car-rarity.legendary {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+}
+
+.car-info p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+}
+
+.car-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 1rem;
+}
+
+.get-btn {
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    color: #000;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.get-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+.locked-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: not-allowed !important;
+}
+
+.new-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0 20px 0 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Inventory Styles */
+.inventory-section {
+    display: none;
+    padding: 1rem;
+}
+
+.inventory-section.active {
+    display: block;
+}
+
+.inventory-header {
+    margin-bottom: 1.5rem;
+}
+
+.inventory-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 0.25rem;
+    margin-top: 1rem;
+}
+
+.inv-tab {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.inv-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.inventory-tab-content {
+    display: none;
+    margin-top: 1rem;
+}
+
+.inventory-tab-content.active {
+    display: block;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.inventory-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.inventory-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.inventory-item.empty {
+    opacity: 0.6;
+    border-style: dashed;
+}
+
+.empty-icon, .item-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.item-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.item-count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.inventory-item.empty p {
+    margin: 0.5rem 0 0.25rem;
+    font-weight: 600;
+}
+
+.inventory-item.empty small {
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+</style>
+
+<script>
+// Додати ці змінні в початок існуючого JavaScript коду
+let ownedCars = JSON.parse(localStorage.getItem('ownedCars') || '[]');
+let ownedNfts = JSON.parse(localStorage.getItem('ownedNfts') || '[]');
+let totalPoints = parseInt(localStorage.getItem('totalPoints') || '11350');
+let starsCount = parseInt(localStorage.getItem('starsCount') || '245');
+let starPacksCount = parseInt(localStorage.getItem('starPacksCount') || '12');
+
+const cars = {
+    tonkeepe: { name: 'Tonkeepe-R 34', price: 0.5, rarity: 'uncommon', multiplier: 1.2, icon: '🏎️' },
+    ai46: { name: 'Car AI46', price: 1.2, rarity: 'rare', multiplier: 1.5, icon: '🚙' },
+    speedster: { name: 'Speed Demon', price: 2.5, rarity: 'epic', multiplier: 2.0, icon: '🏁' }
+};
+
+function buyCar(carId) {
+    const car = cars[carId];
+    if (!car) return;
+
+    if (balance < car.price) {
+        showNotification('Недостатньо коштів!');
+        return;
+    }
+
+    if (ownedCars.find(c => c.id === carId)) {
+        showNotification('Ця машина вже у вас є!');
+        return;
+    }
+
+    balance -= car.price;
+    totalSpent += car.price;
+    ownedCars.push({
+        id: carId,
+        name: car.name,
+        rarity: car.rarity,
+        multiplier: car.multiplier,
+        icon: car.icon,
+        purchaseDate: new Date().toISOString()
+    });
+
+    saveCarData();
+    updateDisplay();
+    updateInventoryDisplay();
+    showNotification(`Машину ${car.name} куплено!`);
+}
+
+function showInventoryTab(tab) {
+    document.querySelectorAll('.inv-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.inventory-tab-content').forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(`inv${tab.charAt(0).toUpperCase() + tab.slice(1)}Tab`).classList.add('active');
+}
+
+function updateInventoryDisplay() {
+    // Update cars in inventory
+    const carsContainer = document.getElementById('ownedCars');
+    if (ownedCars.length === 0) {
+        carsContainer.innerHTML = `
+            <div class="inventory-item empty">
+                <div class="empty-icon">📦</div>
+                <p>Немає машин</p>
+                <small>Купіть машини в гаражі</small>
+            </div>
+        `;
+    } else {
+        carsContainer.innerHTML = ownedCars.map(car => `
+            <div class="inventory-item">
+                <div class="item-icon">${car.icon}</div>
+                <div class="item-name">${car.name}</div>
+                <div class="car-rarity ${car.rarity}">${car.rarity}</div>
+                <div class="item-count">x${car.multiplier}</div>
+            </div>
+        `).join('');
+    }
+
+    // Update NFTs in inventory
+    const nftsContainer = document.getElementById('ownedNfts');
+    if (ownedNfts.length === 0) {
+        nftsContainer.innerHTML = `
+            <div class="inventory-item empty">
+                <div class="empty-icon">🎨</div>
+                <p>Немає NFT</p>
+                <small>Відкрийте кейси для отримання NFT</small>
+            </div>
+        `;
+    } else {
+        nftsContainer.innerHTML = ownedNfts.map(nft => `
+            <div class="inventory-item">
+                <div class="item-icon">🎨</div>
+                <div class="item-name">${nft.name}</div>
+                <div class="car-rarity ${nft.rarity}">${nft.rarity}</div>
+                <div class="item-count">${nft.value} TON</div>
+            </div>
+        `).join('');
+    }
+
+    // Update stats
+    document.getElementById('totalCars').textContent = ownedCars.length;
+    document.getElementById('totalPoints').textContent = totalPoints.toLocaleString();
+    document.getElementById('starsCount').textContent = starsCount;
+    document.getElementById('starPacksCount').textContent = starPacksCount;
+}
+
+function saveCarData() {
+    localStorage.setItem('ownedCars', JSON.stringify(ownedCars));
+    localStorage.setItem('ownedNfts', JSON.stringify(ownedNfts));
+    localStorage.setItem('totalPoints', totalPoints.toString());
+    localStorage.setItem('starsCount', starsCount.toString());
+    localStorage.setItem('starPacksCount', starPacksCount.toString());
+}
+
+// Модифікувати функцію showTab
+function showTab(tab) {
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.home-section, .roulette-content, .profile-section, .garage-section, .inventory-section').forEach(s => s.classList.remove('active'));
+    
+    event.target.closest('.nav-item').classList.add('active');
+    
+    if (tab === 'home') {
+        document.getElementById('homeSection').classList.add('active');
+        showSection('home');
+    } else if (tab === 'roulette') {
+        document.getElementById('rouletteSection').classList.add('active');
+        showSection('roulette');
+    } else if (tab === 'profile') {
+        document.getElementById('profileSection').classList.add('active');
+    } else if (tab === 'garage') {
+        document.getElementById('garageSection').classList.add('active');
+        updateInventoryDisplay();
+    } else if (tab === 'inventory') {
+        document.getElementById('inventorySection').classList.add('active');
+        updateInventoryDisplay();
+    }
+}
+
+// Модифікувати функцію openCase для додавання NFT в інвентар
+function openCase(type) {
+    const prices = { free: 0, basic: 0.1, premium: 0.5, legendary: 1.0 };
+    const price = prices[type];
+
+    if (balance < price) {
+        showNotification('Недостатньо коштів! Поповніть баланс.');
+        return;
+    }
+
+    balance -= price;
+    totalCases++;
+    totalSpent += price;
+
+    const isWin = Math.random() < 0.3;
+    
+    if (isWin) {
+        const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
+        totalWins++;
+        totalWon += reward.value;
+        balance += reward.value;
+        
+        // Додати NFT в інвентар
+        ownedNfts.push({
+            id: Date.now(),
+            name: reward.name,
+            rarity: reward.rarity,
+            value: reward.value,
+            obtainedDate: new Date().toISOString()
+        });
+        
+        showNotification(`Ви виграли!: ${reward.name}! (+${reward.value} TON)`);
+    } else {
+        starsCount += 1;
+        showNotification('Ви виграли 1 зірку. Вітаємо!');
+    }
+
+    saveData();
+    saveCarData();
+    updateDisplay();
+    updateInventoryDisplay();
+}
+
+// Ініціалізувати при завантаженні
+updateInventoryDisplay();
+</script>
+
+<!-- Оновити нижню навігацію -->
+<script>
+// Замінити існуючий блок bottom-nav в HTML на цей:
+document.querySelector('.bottom-nav').innerHTML = `
+    <div class="nav-item active" onclick="showTab('home')">
+        <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" onclick="showTab('garage')">
+        <span class="nav-label">Гараж</span>
+    </div>
+    <div class="nav-item" onclick="showTab('inventory')">
+        <span class="nav-label">Інвентар</span>
+    </div>
+    <div class="nav-item" onclick="showTab('roulette')">
+        <span class="nav-label">Rulet</span>
+    </div>
+    <div class="nav-item" onclick="showTab('profile')">
+        <span class="nav-label">Profile</span>
+    </div>
+`;
+</script>
     </script>
 </body>
 </html>
