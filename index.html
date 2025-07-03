@@ -471,7 +471,7 @@ function updateInventoryDisplay() {
             <div class="inventory-item empty">
                 <div class="empty-icon">🎨</div>
                 <p>Немає NFT</p>
-                <small>Скоро буде доступно</small>
+                <small>Відкрийте кейси для отримання NFT</small>
             </div>
         `;
     } else {
@@ -532,6 +532,60 @@ function showTab(tab) {
         document.getElementById('inventorySection').classList.add('active');
         updateInventoryDisplay();
     }
+}
+
+// Функція для відкриття кейсів (без рулетки)
+function openCase(type) {
+    const prices = { free: 0, basic: 0.1, premium: 0.5, legendary: 1.0 };
+    const price = prices[type];
+
+    if (typeof balance === 'undefined') {
+        showNotification('Помилка: баланс не знайдено!');
+        return;
+    }
+
+    if (balance < price) {
+        showNotification('Недостатньо коштів! Поповніть баланс.');
+        return;
+    }
+
+    balance -= price;
+    if (typeof totalSpent !== 'undefined') {
+        totalSpent += price;
+    }
+
+    const isWin = Math.random() < 0.3;
+    
+    if (isWin) {
+        // Простий список нагород
+        const nftRewards = [
+            { name: 'Common NFT', value: 0.1, rarity: 'common' },
+            { name: 'Rare NFT', value: 0.3, rarity: 'rare' },
+            { name: 'Epic NFT', value: 0.7, rarity: 'epic' },
+            { name: 'Legendary NFT', value: 1.5, rarity: 'legendary' }
+        ];
+        
+        const reward = nftRewards[Math.floor(Math.random() * nftRewards.length)];
+        balance += reward.value;
+        
+        // Додати NFT в інвентар
+        ownedNfts.push({
+            id: Date.now(),
+            name: reward.name,
+            rarity: reward.rarity,
+            value: reward.value,
+            obtainedDate: new Date().toISOString()
+        });
+        
+        showNotification(`Ви виграли: ${reward.name}! (+${reward.value} TON)`);
+    } else {
+        starsCount += 1;
+        showNotification('Ви виграли 1 зірку. Вітаємо!');
+    }
+
+    saveCarData();
+    updateDisplay();
+    updateInventoryDisplay();
 }
 
 // Функція для показу повідомлень (якщо не існує)
