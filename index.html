@@ -503,7 +503,7 @@
             <div class="background-cars"></div>
             
             <div class="header">
-                <h1>DRIFT</h1>
+                <h1>spinquanta</h1>
             </div>
 
             <div class="balance-section">
@@ -517,7 +517,7 @@
                     <span id="fuelDisplay">10</span> ⛽
                 </div>
                 <button class="deposit-btn" onclick="showDepositModal()">
-                    DEPOSIT
+                    Deposit
                 </button>
             </div>
 
@@ -564,7 +564,7 @@
             <div class="market-header">
                 <h1 class="market-title">CARS</h1>
                 <div class="market-balance">
-                    <span id="marketTokenBalance">11,350</span> PTS
+                    <span id="marketTokenBalance">100</span> PTS
                 </div>
             </div>
 
@@ -669,7 +669,7 @@
             <div class="deposit-content">
                 <div class="deposit-title">Deposit TON</div>
                 <div class="deposit-address" id="depositAddress">
-                    UQB7_3K8h4bE6LwFG7zQmHBxLKCJvFmzYlnHdPiCFvJHqmwW
+                    UQDx5LBGp7K7A5hrYu4y6W5RPO4hwk5fL_LWzov0FlYeJMMp
                 </div>
                 <button class="copy-btn" onclick="copyAddress()">
                     COPY ADDRESS
@@ -686,11 +686,9 @@
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="showView('game')">
-                <div class="nav-icon">🎮</div>
-                <div class="nav-label">Game</div>
+                <div class="nav-label">Home</div>
             </div>
             <div class="nav-item" onclick="showView('market')">
-                <div class="nav-icon">🛒</div>
                 <div class="nav-label">Market</div>
             </div>
         </div>
@@ -781,14 +779,14 @@
 
         function startDrift() {
             if (!selectedMap) {
-                alert('Please select a map first! 🗺️');
+                alert('Please select a map first!');
                 if (!isExpanded) {
                     toggleExpand();
                 }
                 return;
             }
             
-            alert(`Starting drift race on ${selectedMap.toUpperCase()}! 🏎️💨`);
+            alert(`Starting drift race on ${selectedMap.toUpperCase()}!`);
             // Here you would implement the actual drift game
         }
 
@@ -1027,7 +1025,7 @@
                     updateFuelDisplay();
                     alert(`Successfully bought ${amount} fuel units! ⛽`);
                 } else {
-                    alert('Insufficient tokens! 💸');
+                    alert('Insufficient tokens!');
                 }
             } else if (currency === 'ton') {
                 canAfford = tonBalance >= price;
@@ -1038,7 +1036,7 @@
                     updateFuelDisplay();
                     alert(`Successfully bought ${amount} fuel units! ⛽`);
                 } else {
-                    alert('Insufficient TON! 💸');
+                    alert('Insufficient TON!');
                 }
             }
         }
@@ -1052,7 +1050,7 @@
                     tokenBalance -= price;
                     ownedCars.push(carId);
                     updateBalance();
-                    alert(`Successfully bought ${carId}! 🎉`);
+                    alert(`Successfully bought ${carId}!`);
                     
                     // Disable the buy button for this car
                     const buyButtons = document.querySelectorAll('.buy-btn');
@@ -1064,7 +1062,7 @@
                         }
                     });
                 } else {
-                    alert('Insufficient tokens! 💸');
+                    alert('Insufficient tokens!');
                 }
             } else if (currency === 'ton') {
                 canAfford = tonBalance >= price;
@@ -1072,7 +1070,7 @@
                     tonBalance -= price;
                     ownedCars.push(carId);
                     updateBalance();
-                    alert(`Successfully bought ${carId}! 🎉`);
+                    alert(`Successfully bought ${carId}!`);
                     
                     // Disable the buy button for this car
                     const buyButtons = document.querySelectorAll('.buy-btn');
@@ -1084,7 +1082,7 @@
                         }
                     });
                 } else {
-                    alert('Insufficient TON! 💸');
+                    alert('Insufficient TON!');
                 }
             }
         }
@@ -1128,379 +1126,5 @@
         `;
         document.head.appendChild(style);
     </script>
-    <!-- Додайте цей код в кінець вашого HTML файлу перед </body> -->
-
-<style>
-/* Новий стиль для карток машин */
-.car-card {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-    height: 200px;
-    margin-bottom: 20px;
-}
-
-.car-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        transparent 30%,
-        transparent 70%,
-        rgba(255, 255, 255, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.car-card:hover::before {
-    opacity: 1;
-}
-
-/* Мультиплікатор */
-.car-multiplier {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 1.4em;
-    font-weight: bold;
-    z-index: 10;
-}
-
-/* Ціна */
-.car-price {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 215, 0, 0.9);
-    color: #000;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 1em;
-    font-weight: bold;
-    z-index: 10;
-}
-
-.car-price.ton {
-    background: rgba(0, 152, 234, 0.9);
-    color: white;
-}
-
-/* Зображення машини */
-.car-image {
-    width: 80%;
-    height: 100px;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4em;
-    z-index: 5;
-}
-
-/* Інформація про машину */
-.car-info {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
-    z-index: 10;
-}
-
-.car-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 5px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-.car-rarity {
-    font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 5px;
-}
-
-.car-description {
-    display: none;
-}
-
-/* Кнопка покупки */
-.buy-btn {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background: rgba(74, 144, 226, 0.9);
-    border: none;
-    border-radius: 12px;
-    padding: 8px 16px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.9em;
-    z-index: 10;
-    transition: all 0.3s ease;
-}
-
-.buy-btn:hover {
-    background: rgba(74, 144, 226, 1);
-    transform: translateY(-2px);
-}
-
-/* NEW badge */
-.new-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: linear-gradient(135deg, #ff6b6b, #ff4757);
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 8px;
-    transform: rotate(15deg);
-    z-index: 15;
-}
-
-/* Спеціальні кольори для різних машин */
-.car-card:nth-child(1) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.car-card:nth-child(2) {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.car-card:nth-child(3) {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.car-card:nth-child(4) {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
-.car-card:nth-child(5) {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-}
-
-/* Зміна розмірів сітки */
-.cars-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 0 10px;
-}
-
-/* Покращення для паливних карток */
-.fuel-card {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
-    border: 2px solid rgba(255, 107, 107, 0.3);
-}
-
-.fuel-card .car-image {
-    font-size: 3em;
-    color: white;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-
-.fuel-multiplier {
-    background: rgba(255, 107, 107, 0.9);
-    color: white;
-}
-
-/* Анімації */
-@keyframes carGlow {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
-    50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); }
-}
-
-.car-card:hover {
-    animation: carGlow 2s ease-in-out infinite;
-    transform: translateY(-5px);
-}
-
-/* Покращення категорій */
-.car-categories {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 30px;
-    padding: 0 10px;
-}
-
-.category-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    padding: 12px 20px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9em;
-    font-weight: bold;
-}
-
-.category-btn.active {
-    background: rgba(74, 144, 226, 0.8);
-    border-color: #4A90E2;
-    transform: scale(1.05);
-}
-
-.category-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-</style>
-
-<script>
-// Оновлюємо HTML для машин
-function showCarsGrid() {
-    const carsGrid = document.getElementById('carsGrid');
-    carsGrid.innerHTML = `
-        <!-- Car 1 -->
-        <div class="car-card">
-            <div class="car-multiplier">X1.2</div>
-            <div class="car-price">500 PTS</div>
-            <div class="car-image">🚗</div>
-            <div class="car-info">
-                <div class="car-name">Tonkeepe-R 34 • Uncommon</div>
-                <div class="car-rarity">Tonkeepe-R 34 — A balance of technology and insane control, where every second in drift...</div>
-            </div>
-            <button class="buy-btn" onclick="buyCar('msp-r34', 500, 'tokens')">
-                GET
-            </button>
-        </div>
-
-        <!-- Car 2 -->
-        <div class="car-card">
-            <div class="car-multiplier">X1.5</div>
-            <div class="car-price">200 000 PTS</div>
-            <div class="new-badge">NEW</div>
-            <div class="car-image">🏎️</div>
-            <div class="car-info">
-                <div class="car-name">Car A146 • Rare</div>
-                <div class="car-rarity">The A146 car is agile with precise handling. Its reliability has made it a favorite among drifter...</div>
-            </div>
-            <button class="buy-btn" onclick="buyCar('vel-a146', 200000, 'tokens')">
-                GET
-            </button>
-        </div>
-
-        <!-- Car 3 -->
-        <div class="car-card">
-            <div class="car-multiplier">X2.0</div>
-            <div class="car-price">⭐ 10 000 Stars</div>
-            <div class="new-badge">NEW</div>
-            <div class="car-image">🏁</div>
-            <div class="car-info">
-                <div class="car-name">Thunder-X9 • Epic</div>
-                <div class="car-rarity">The most powerful car in the garage. Built for professional racers...</div>
-            </div>
-            <button class="buy-btn" onclick="buyCar('thu-x9', 10000, 'stars')">
-                GET
-            </button>
-        </div>
-
-        <!-- Car 4 -->
-        <div class="car-card">
-            <div class="car-multiplier">X1.8</div>
-            <div class="car-price ton">1.2 TON</div>
-            <div class="car-image">🚙</div>
-            <div class="car-info">
-                <div class="car-name">Drift-K33 • Legendary</div>
-                <div class="car-rarity">A legendary street racing car that has dominated underground circuits...</div>
-            </div>
-            <button class="buy-btn" onclick="buyCar('dri-k33', 1.2, 'ton')">
-                GET
-            </button>
-        </div>
-
-        <!-- Car 5 -->
-        <div class="car-card">
-            <div class="car-multiplier">X1.3</div>
-            <div class="car-price">800 PTS</div>
-            <div class="car-image">🚘</div>
-            <div class="car-info">
-                <div class="car-name">Nitro-S15 • Rare</div>
-                <div class="car-rarity">Built for speed with advanced nitrous systems. Perfect for racing...</div>
-            </div>
-            <button class="buy-btn" onclick="buyCar('nit-s15', 800, 'tokens')">
-                GET
-            </button>
-        </div>
-    `;
-}
-
-// Оновлюємо HTML для палива
-function showFuelGrid() {
-    const carsGrid = document.getElementById('carsGrid');
-    carsGrid.innerHTML = `
-        <!-- Fuel Pack 1 -->
-        <div class="car-card fuel-card">
-            <div class="car-multiplier fuel-multiplier">+10</div>
-            <div class="car-price">100 PTS</div>
-            <div class="car-image">⛽</div>
-            <div class="car-info">
-                <div class="car-name">Basic Fuel Pack</div>
-                <div class="car-rarity">Standard fuel for racing. Provides 10 units of high-quality gasoline...</div>
-            </div>
-            <button class="buy-btn" onclick="buyFuel('basic-fuel', 100, 'tokens', 10)">
-                GET
-            </button>
-        </div>
-
-        <!-- Fuel Pack 2 -->
-        <div class="car-card fuel-card">
-            <div class="car-multiplier fuel-multiplier">+25</div>
-            <div class="car-price">200 PTS</div>
-            <div class="car-image">⛽</div>
-            <div class="car-info">
-                <div class="car-name">Premium Fuel Pack</div>
-                <div class="car-rarity">Premium fuel pack with better efficiency. Perfect for extended racing sessions...</div>
-            </div>
-            <button class="buy-btn" onclick="buyFuel('premium-fuel', 200, 'tokens', 25)">
-                GET
-            </button>
-        </div>
-
-        <!-- Fuel Pack 3 -->
-        <div class="car-card fuel-card">
-            <div class="car-multiplier fuel-multiplier">+50</div>
-            <div class="car-price ton">0.1 TON</div>
-            <div class="new-badge">NEW</div>
-            <div class="car-image">⛽</div>
-            <div class="car-info">
-                <div class="car-name">Super Fuel Pack</div>
-                <div class="car-rarity">Professional grade fuel for serious racers. Provides maximum performance...</div>
-            </div>
-            <button class="buy-btn" onclick="buyFuel('super-fuel', 0.1, 'ton', 50)">
-                GET
-            </button>
-        </div>
-    `;
-}
-
-// Ініціалізація при завантаженні
-document.addEventListener('DOMContentLoaded', function() {
-    // Оновлюємо поточний вигляд
-    if (document.querySelector('.category-btn.active').textContent === 'Cars') {
-        showCarsGrid();
-    }
-});
-</script>
 </body>
 </html>
