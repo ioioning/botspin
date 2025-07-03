@@ -1131,272 +1131,375 @@
     <!-- Додайте цей код в кінець вашого HTML файлу перед </body> -->
 
 <style>
-/* Покращені стилі для машин */
-.car-image {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+/* Новий стиль для карток машин */
+.car-card {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 0;
     position: relative;
     overflow: hidden;
+    height: 200px;
+    margin-bottom: 20px;
 }
 
-.car-image::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: rotate(45deg);
-    animation: shine 3s ease-in-out infinite;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-    50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-    100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-}
-
-/* Спеціальні стилі для різних машин */
-.car-card:nth-child(1) .car-image {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    box-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
-}
-
-.car-card:nth-child(2) .car-image {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
-}
-
-.car-card:nth-child(3) .car-image {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
-}
-
-.car-card:nth-child(4) .car-image {
-    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-    box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
-}
-
-.car-card:nth-child(5) .car-image {
-    background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
-    box-shadow: 0 0 20px rgba(26, 188, 156, 0.3);
-}
-
-/* Покращені стилі для бензину */
-.fuel-tank {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
-    border: 2px solid rgba(255, 107, 107, 0.5);
-    position: relative;
-    overflow: hidden;
-}
-
-.fuel-tank::before {
+.car-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(0deg,
-        rgba(255, 107, 107, 0.8) 0%,
-        rgba(255, 107, 107, 0.6) 30%,
-        rgba(255, 107, 107, 0.4) 60%,
-        transparent 100%);
-    animation: fuelFlow 2s ease-in-out infinite;
-}
-
-@keyframes fuelFlow {
-    0%, 100% { transform: translateY(100%); }
-    50% { transform: translateY(0%); }
-}
-
-.fuel-tank::after {
-    content: '⛽';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2em;
-    color: white;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    z-index: 2;
-}
-
-/* Анімація для рідкого бензину */
-.fuel-liquid {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(0deg, #ff4757 0%, #ff6b6b 100%);
-    animation: liquidMove 3s ease-in-out infinite;
-}
-
-@keyframes liquidMove {
-    0%, 100% {
-        border-radius: 0 0 10px 10px;
-        transform: scaleY(1);
-    }
-    50% {
-        border-radius: 50% 50% 10px 10px;
-        transform: scaleY(1.1);
-    }
-}
-
-/* Покращені ефекти для карток */
-.car-card, .fuel-card {
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.car-card:hover, .fuel-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.car-card::before, .fuel-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    border-radius: 15px;
+    background: linear-gradient(45deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(255, 255, 255, 0.1) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.car-card:hover::before, .fuel-card:hover::before {
+.car-card:hover::before {
     opacity: 1;
 }
 
-/* Покращені значки рарості */
-.car-rarity::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 5px;
+/* Мультиплікатор */
+.car-multiplier {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 1.4em;
+    font-weight: bold;
+    z-index: 10;
 }
 
-.car-card:nth-child(1) .car-rarity::before {
-    background: #2ecc71; /* Uncommon - зелений */
+/* Ціна */
+.car-price {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 215, 0, 0.9);
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    z-index: 10;
 }
 
-.car-card:nth-child(2) .car-rarity::before {
-    background: #3498db; /* Rare - синій */
+.car-price.ton {
+    background: rgba(0, 152, 234, 0.9);
+    color: white;
 }
 
-.car-card:nth-child(3) .car-rarity::before {
-    background: #9b59b6; /* Epic - фіолетовий */
+/* Зображення машини */
+.car-image {
+    width: 80%;
+    height: 100px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4em;
+    z-index: 5;
 }
 
-.car-card:nth-child(4) .car-rarity::before {
-    background: #f39c12; /* Legendary - помаранчевий */
+/* Інформація про машину */
+.car-info {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    z-index: 10;
 }
 
-.car-card:nth-child(5) .car-rarity::before {
-    background: #3498db; /* Rare - синій */
+.car-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Покращені ефекти для кнопок */
+.car-rarity {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 5px;
+}
+
+.car-description {
+    display: none;
+}
+
+/* Кнопка покупки */
 .buy-btn {
-    position: relative;
-    overflow: hidden;
-}
-
-.buy-btn::before {
-    content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(74, 144, 226, 0.9);
+    border: none;
+    border-radius: 12px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9em;
+    z-index: 10;
+    transition: all 0.3s ease;
 }
 
-.buy-btn:hover::before {
-    left: 100%;
+.buy-btn:hover {
+    background: rgba(74, 144, 226, 1);
+    transform: translateY(-2px);
 }
 
-/* Спеціальні ефекти для нових машин */
+/* NEW badge */
 .new-badge {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: rotate(15deg) scale(1); }
-    50% { transform: rotate(15deg) scale(1.1); }
-    100% { transform: rotate(15deg) scale(1); }
-}
-
-/* Покращення індикатора бензину */
-.balance-item:has(#fuelDisplay) {
-    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 82, 82, 0.3));
-    border: 1px solid rgba(255, 107, 107, 0.4);
-    position: relative;
-    overflow: hidden;
-}
-
-.balance-item:has(#fuelDisplay)::before {
-    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    animation: fuelGlow 3s ease-in-out infinite;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transform: rotate(15deg);
+    z-index: 15;
 }
 
-@keyframes fuelGlow {
-    0%, 100% { transform: translateX(-100%); }
-    50% { transform: translateX(100%); }
+/* Спеціальні кольори для різних машин */
+.car-card:nth-child(1) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.car-card:nth-child(2) {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.car-card:nth-child(3) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.car-card:nth-child(4) {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.car-card:nth-child(5) {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Зміна розмірів сітки */
+.cars-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 10px;
+}
+
+/* Покращення для паливних карток */
+.fuel-card {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+}
+
+.fuel-card .car-image {
+    font-size: 3em;
+    color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.fuel-multiplier {
+    background: rgba(255, 107, 107, 0.9);
+    color: white;
+}
+
+/* Анімації */
+@keyframes carGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); }
+}
+
+.car-card:hover {
+    animation: carGlow 2s ease-in-out infinite;
+    transform: translateY(-5px);
+}
+
+/* Покращення категорій */
+.car-categories {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.category-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 12px 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.category-btn.active {
+    background: rgba(74, 144, 226, 0.8);
+    border-color: #4A90E2;
+    transform: scale(1.05);
+}
+
+.category-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 </style>
 
 <script>
-// Функція для оновлення стилів машин при зміні категорії
-function updateCarStyles() {
-    const carCards = document.querySelectorAll('.car-card');
+// Оновлюємо HTML для машин
+function showCarsGrid() {
+    const carsGrid = document.getElementById('carsGrid');
+    carsGrid.innerHTML = `
+        <!-- Car 1 -->
+        <div class="car-card">
+            <div class="car-multiplier">X1.2</div>
+            <div class="car-price">500 PTS</div>
+            <div class="car-image">🚗</div>
+            <div class="car-info">
+                <div class="car-name">Tonkeepe-R 34 • Uncommon</div>
+                <div class="car-rarity">Tonkeepe-R 34 — A balance of technology and insane control, where every second in drift...</div>
+            </div>
+            <button class="buy-btn" onclick="buyCar('msp-r34', 500, 'tokens')">
+                GET
+            </button>
+        </div>
 
-    carCards.forEach((card, index) => {
-        const carImage = card.querySelector('.car-image');
+        <!-- Car 2 -->
+        <div class="car-card">
+            <div class="car-multiplier">X1.5</div>
+            <div class="car-price">200 000 PTS</div>
+            <div class="new-badge">NEW</div>
+            <div class="car-image">🏎️</div>
+            <div class="car-info">
+                <div class="car-name">Car A146 • Rare</div>
+                <div class="car-rarity">The A146 car is agile with precise handling. Its reliability has made it a favorite among drifter...</div>
+            </div>
+            <button class="buy-btn" onclick="buyCar('vel-a146', 200000, 'tokens')">
+                GET
+            </button>
+        </div>
 
-        // Додаємо спеціальні класи для бензину
-        if (card.innerHTML.includes('Fuel Pack')) {
-            carImage.classList.add('fuel-tank');
+        <!-- Car 3 -->
+        <div class="car-card">
+            <div class="car-multiplier">X2.0</div>
+            <div class="car-price">⭐ 10 000 Stars</div>
+            <div class="new-badge">NEW</div>
+            <div class="car-image">🏁</div>
+            <div class="car-info">
+                <div class="car-name">Thunder-X9 • Epic</div>
+                <div class="car-rarity">The most powerful car in the garage. Built for professional racers...</div>
+            </div>
+            <button class="buy-btn" onclick="buyCar('thu-x9', 10000, 'stars')">
+                GET
+            </button>
+        </div>
 
-            // Додаємо рідкий ефект для бензину
-            const liquid = document.createElement('div');
-            liquid.className = 'fuel-liquid';
-            carImage.appendChild(liquid);
-        }
-    });
+        <!-- Car 4 -->
+        <div class="car-card">
+            <div class="car-multiplier">X1.8</div>
+            <div class="car-price ton">1.2 TON</div>
+            <div class="car-image">🚙</div>
+            <div class="car-info">
+                <div class="car-name">Drift-K33 • Legendary</div>
+                <div class="car-rarity">A legendary street racing car that has dominated underground circuits...</div>
+            </div>
+            <button class="buy-btn" onclick="buyCar('dri-k33', 1.2, 'ton')">
+                GET
+            </button>
+        </div>
+
+        <!-- Car 5 -->
+        <div class="car-card">
+            <div class="car-multiplier">X1.3</div>
+            <div class="car-price">800 PTS</div>
+            <div class="car-image">🚘</div>
+            <div class="car-info">
+                <div class="car-name">Nitro-S15 • Rare</div>
+                <div class="car-rarity">Built for speed with advanced nitrous systems. Perfect for racing...</div>
+            </div>
+            <button class="buy-btn" onclick="buyCar('nit-s15', 800, 'tokens')">
+                GET
+            </button>
+        </div>
+    `;
 }
 
-// Перевизначаємо функцію showFuelGrid для додавання стилів
-const originalShowFuelGrid = showFuelGrid;
-showFuelGrid = function() {
-    originalShowFuelGrid();
-    setTimeout(updateCarStyles, 100);
-};
+// Оновлюємо HTML для палива
+function showFuelGrid() {
+    const carsGrid = document.getElementById('carsGrid');
+    carsGrid.innerHTML = `
+        <!-- Fuel Pack 1 -->
+        <div class="car-card fuel-card">
+            <div class="car-multiplier fuel-multiplier">+10</div>
+            <div class="car-price">100 PTS</div>
+            <div class="car-image">⛽</div>
+            <div class="car-info">
+                <div class="car-name">Basic Fuel Pack</div>
+                <div class="car-rarity">Standard fuel for racing. Provides 10 units of high-quality gasoline...</div>
+            </div>
+            <button class="buy-btn" onclick="buyFuel('basic-fuel', 100, 'tokens', 10)">
+                GET
+            </button>
+        </div>
 
-// Перевизначаємо функцію showCarsGrid для додавання стилів
-const originalShowCarsGrid = showCarsGrid;
-showCarsGrid = function() {
-    originalShowCarsGrid();
-    setTimeout(updateCarStyles, 100);
-};
+        <!-- Fuel Pack 2 -->
+        <div class="car-card fuel-card">
+            <div class="car-multiplier fuel-multiplier">+25</div>
+            <div class="car-price">200 PTS</div>
+            <div class="car-image">⛽</div>
+            <div class="car-info">
+                <div class="car-name">Premium Fuel Pack</div>
+                <div class="car-rarity">Premium fuel pack with better efficiency. Perfect for extended racing sessions...</div>
+            </div>
+            <button class="buy-btn" onclick="buyFuel('premium-fuel', 200, 'tokens', 25)">
+                GET
+            </button>
+        </div>
 
-// Ініціалізуємо стилі при завантаженні
+        <!-- Fuel Pack 3 -->
+        <div class="car-card fuel-card">
+            <div class="car-multiplier fuel-multiplier">+50</div>
+            <div class="car-price ton">0.1 TON</div>
+            <div class="new-badge">NEW</div>
+            <div class="car-image">⛽</div>
+            <div class="car-info">
+                <div class="car-name">Super Fuel Pack</div>
+                <div class="car-rarity">Professional grade fuel for serious racers. Provides maximum performance...</div>
+            </div>
+            <button class="buy-btn" onclick="buyFuel('super-fuel', 0.1, 'ton', 50)">
+                GET
+            </button>
+        </div>
+    `;
+}
+
+// Ініціалізація при завантаженні
 document.addEventListener('DOMContentLoaded', function() {
-    updateCarStyles();
+    // Оновлюємо поточний вигляд
+    if (document.querySelector('.category-btn.active').textContent === 'Cars') {
+        showCarsGrid();
+    }
 });
 </script>
 </body>
