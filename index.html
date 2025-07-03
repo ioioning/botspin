@@ -1128,5 +1128,276 @@
         `;
         document.head.appendChild(style);
     </script>
+    <!-- Додайте цей код в кінець вашого HTML файлу перед </body> -->
+
+<style>
+/* Покращені стилі для машин */
+.car-image {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.car-image::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+}
+
+/* Спеціальні стилі для різних машин */
+.car-card:nth-child(1) .car-image {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+}
+
+.car-card:nth-child(2) .car-image {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+}
+
+.car-card:nth-child(3) .car-image {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
+}
+
+.car-card:nth-child(4) .car-image {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+}
+
+.car-card:nth-child(5) .car-image {
+    background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+    box-shadow: 0 0 20px rgba(26, 188, 156, 0.3);
+}
+
+/* Покращені стилі для бензину */
+.fuel-tank {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+    border: 2px solid rgba(255, 107, 107, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.fuel-tank::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg,
+        rgba(255, 107, 107, 0.8) 0%,
+        rgba(255, 107, 107, 0.6) 30%,
+        rgba(255, 107, 107, 0.4) 60%,
+        transparent 100%);
+    animation: fuelFlow 2s ease-in-out infinite;
+}
+
+@keyframes fuelFlow {
+    0%, 100% { transform: translateY(100%); }
+    50% { transform: translateY(0%); }
+}
+
+.fuel-tank::after {
+    content: '⛽';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    z-index: 2;
+}
+
+/* Анімація для рідкого бензину */
+.fuel-liquid {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(0deg, #ff4757 0%, #ff6b6b 100%);
+    animation: liquidMove 3s ease-in-out infinite;
+}
+
+@keyframes liquidMove {
+    0%, 100% {
+        border-radius: 0 0 10px 10px;
+        transform: scaleY(1);
+    }
+    50% {
+        border-radius: 50% 50% 10px 10px;
+        transform: scaleY(1.1);
+    }
+}
+
+/* Покращені ефекти для карток */
+.car-card, .fuel-card {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.car-card:hover, .fuel-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.car-card::before, .fuel-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.car-card:hover::before, .fuel-card:hover::before {
+    opacity: 1;
+}
+
+/* Покращені значки рарості */
+.car-rarity::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.car-card:nth-child(1) .car-rarity::before {
+    background: #2ecc71; /* Uncommon - зелений */
+}
+
+.car-card:nth-child(2) .car-rarity::before {
+    background: #3498db; /* Rare - синій */
+}
+
+.car-card:nth-child(3) .car-rarity::before {
+    background: #9b59b6; /* Epic - фіолетовий */
+}
+
+.car-card:nth-child(4) .car-rarity::before {
+    background: #f39c12; /* Legendary - помаранчевий */
+}
+
+.car-card:nth-child(5) .car-rarity::before {
+    background: #3498db; /* Rare - синій */
+}
+
+/* Покращені ефекти для кнопок */
+.buy-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.buy-btn:hover::before {
+    left: 100%;
+}
+
+/* Спеціальні ефекти для нових машин */
+.new-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: rotate(15deg) scale(1); }
+    50% { transform: rotate(15deg) scale(1.1); }
+    100% { transform: rotate(15deg) scale(1); }
+}
+
+/* Покращення індикатора бензину */
+.balance-item:has(#fuelDisplay) {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 82, 82, 0.3));
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-item:has(#fuelDisplay)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: fuelGlow 3s ease-in-out infinite;
+}
+
+@keyframes fuelGlow {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+</style>
+
+<script>
+// Функція для оновлення стилів машин при зміні категорії
+function updateCarStyles() {
+    const carCards = document.querySelectorAll('.car-card');
+
+    carCards.forEach((card, index) => {
+        const carImage = card.querySelector('.car-image');
+
+        // Додаємо спеціальні класи для бензину
+        if (card.innerHTML.includes('Fuel Pack')) {
+            carImage.classList.add('fuel-tank');
+
+            // Додаємо рідкий ефект для бензину
+            const liquid = document.createElement('div');
+            liquid.className = 'fuel-liquid';
+            carImage.appendChild(liquid);
+        }
+    });
+}
+
+// Перевизначаємо функцію showFuelGrid для додавання стилів
+const originalShowFuelGrid = showFuelGrid;
+showFuelGrid = function() {
+    originalShowFuelGrid();
+    setTimeout(updateCarStyles, 100);
+};
+
+// Перевизначаємо функцію showCarsGrid для додавання стилів
+const originalShowCarsGrid = showCarsGrid;
+showCarsGrid = function() {
+    originalShowCarsGrid();
+    setTimeout(updateCarStyles, 100);
+};
+
+// Ініціалізуємо стилі при завантаженні
+document.addEventListener('DOMContentLoaded', function() {
+    updateCarStyles();
+});
+</script>
 </body>
 </html>
