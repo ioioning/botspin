@@ -494,7 +494,6 @@
             border-radius: 10px;
             transform: rotate(15deg);
         }
-
 	<style>
 .loading-screen {
     position: fixed;
@@ -508,16 +507,18 @@
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    animation: fadeOut 1s ease-in-out 3s forwards;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
 
 .loading-screen.hide {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .loading-car {
-    width: 200px;
-    height: 120px;
+    width: 150px;
+    height: 90px;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><defs><linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:1" /><stop offset="50%" style="stop-color:%234A90E2;stop-opacity:1" /><stop offset="100%" style="stop-color:%23FFD700;stop-opacity:1" /></linearGradient></defs><path d="M20 60 L40 40 L80 40 L120 40 L160 40 L180 60 L180 80 L160 90 L140 90 L60 90 L40 90 L20 80 Z" fill="url(%23carGradient)" stroke="%23fff" stroke-width="2"/><circle cx="50" cy="80" r="12" fill="%23333"/><circle cx="150" cy="80" r="12" fill="%23333"/><rect x="60" y="45" width="80" height="25" fill="%23333" opacity="0.7"/></svg>') no-repeat center;
     background-size: contain;
     animation: driftCar 2s ease-in-out infinite;
@@ -526,34 +527,34 @@
 
 .loading-title {
     font-family: 'Impact', 'Arial Black', sans-serif;
-    font-size: 4em;
+    font-size: 3em;
     font-weight: 900;
     color: #FFD700;
-    text-shadow:
+    text-shadow: 
         0 0 20px rgba(255, 215, 0, 0.8),
         0 0 40px rgba(255, 215, 0, 0.6),
-        0 0 60px rgba(255, 215, 0, 0.4),
         3px 3px 0px #FF6B6B,
         6px 6px 0px #4A90E2;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     animation: glowPulse 2s ease-in-out infinite;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
 .loading-subtitle {
     font-family: 'Arial', sans-serif;
-    font-size: 1.2em;
+    font-size: 1em;
     color: #ccc;
     margin-bottom: 40px;
+    text-align: center;
     animation: fadeInOut 2s ease-in-out infinite;
 }
 
 .loading-progress {
-    width: 250px;
-    height: 6px;
+    width: 200px;
+    height: 4px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+    border-radius: 2px;
     overflow: hidden;
     margin-bottom: 20px;
 }
@@ -562,8 +563,8 @@
     height: 100%;
     background: linear-gradient(90deg, #FF6B6B, #4A90E2, #FFD700);
     background-size: 200% 100%;
-    border-radius: 3px;
-    animation: progressLoad 3s ease-in-out forwards, gradientShift 1s ease-in-out infinite;
+    border-radius: 2px;
+    animation: progressLoad 2.5s ease-in-out forwards, gradientShift 1s ease-in-out infinite;
     width: 0%;
 }
 
@@ -585,8 +586,8 @@
 
 .particle {
     position: absolute;
-    width: 3px;
-    height: 3px;
+    width: 2px;
+    height: 2px;
     background: #FFD700;
     border-radius: 50%;
     animation: floatParticles 4s ease-in-out infinite;
@@ -599,19 +600,17 @@
 }
 
 @keyframes glowPulse {
-    0%, 100% {
-        text-shadow:
+    0%, 100% { 
+        text-shadow: 
             0 0 20px rgba(255, 215, 0, 0.8),
             0 0 40px rgba(255, 215, 0, 0.6),
-            0 0 60px rgba(255, 215, 0, 0.4),
             3px 3px 0px #FF6B6B,
             6px 6px 0px #4A90E2;
     }
-    50% {
-        text-shadow:
+    50% { 
+        text-shadow: 
             0 0 30px rgba(255, 215, 0, 1),
             0 0 50px rgba(255, 215, 0, 0.8),
-            0 0 70px rgba(255, 215, 0, 0.6),
             3px 3px 0px #FF6B6B,
             6px 6px 0px #4A90E2;
     }
@@ -638,20 +637,15 @@
     90% { opacity: 1; }
     100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
-
-@keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; visibility: hidden; }
-}
 </style>
+
     </style>
 </head>
 <body>
-    <div class="container">
-	    <div id="loadingScreen" class="loading-screen">
+	<div id="loadingScreen" class="loading-screen">
     <div class="loading-particles"></div>
     <div class="loading-car"></div>
-    <div class="loading-title">DRIFTERZ</div>
+    <div class="loading-title">spinquanta</div>
     <div class="loading-subtitle">Prepare for the ultimate drift experience</div>
     <div class="loading-progress">
         <div class="loading-progress-bar"></div>
@@ -659,6 +653,7 @@
     <div class="loading-text">Loading...</div>
 </div>
 
+    <div class="container">
         <!-- Main Game View -->
         <div id="gameView" class="game-view">
             <div class="background-cars"></div>
@@ -856,49 +851,63 @@
     </div>
 
     <script>
-
-<!-- Додайте цей JavaScript в кінець секції <script> -->
-<script>
-// Додайте цей код в кінець вашого JavaScript
-document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function() {
+    // Приховуємо основний контент на час завантаження
+    const container = document.querySelector('.container');
+    if (container) {
+        container.style.display = 'none';
+    }
+    
     // Створюємо частинки
     const particlesContainer = document.querySelector('.loading-particles');
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 4 + 's';
-        particle.style.animationDuration = (3 + Math.random() * 2) + 's';
-        particlesContainer.appendChild(particle);
+    if (particlesContainer) {
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            particlesContainer.appendChild(particle);
+        }
     }
-
-    // Приховуємо екран завантаження через 3 секунди
-    setTimeout(() => {
-        const loadingScreen = document.getElementById('loadingScreen');
-        loadingScreen.classList.add('hide');
-    }, 3000);
-
+    
     // Змінюємо текст завантаження
     const loadingTexts = [
         'Loading engines...',
         'Preparing tracks...',
         'Tuning cars...',
-        'Starting drift...'
+        'Ready to drift!'
     ];
-
+    
     let textIndex = 0;
     const loadingText = document.querySelector('.loading-text');
-
+    
     const textInterval = setInterval(() => {
-        if (textIndex < loadingTexts.length) {
+        if (textIndex < loadingTexts.length && loadingText) {
             loadingText.textContent = loadingTexts[textIndex];
             textIndex++;
         } else {
             clearInterval(textInterval);
         }
-    }, 750);
+    }, 650);
+    
+    // Приховуємо екран завантаження через 2.8 секунди
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hide');
+        }
+        
+        // Показуємо основний контент
+        if (container) {
+            container.style.display = 'block';
+        }
+        
+        // Ініціалізуємо гру після завантаження
+        updateBalance();
+        updateFuelDisplay();
+    }, 2800);
 });
-</script>
         let tokenBalance = 11350;
         let tonBalance = 0.00;
         let isExpanded = false;
