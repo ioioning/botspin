@@ -637,8 +637,124 @@
     90% { opacity: 1; }
     100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
+    <style>
+.loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2d2d2d 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+.loading-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+.loading-car {
+    width: 150px;
+    height: 90px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><defs><linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:1" /><stop offset="50%" style="stop-color:%234A90E2;stop-opacity:1" /><stop offset="100%" style="stop-color:%23FFD700;stop-opacity:1" /></linearGradient></defs><path d="M20 60 L40 40 L80 40 L120 40 L160 40 L180 60 L180 80 L160 90 L140 90 L60 90 L40 90 L20 80 Z" fill="url(%23carGradient)" stroke="%23fff" stroke-width="2"/><circle cx="50" cy="80" r="12" fill="%23333"/><circle cx="150" cy="80" r="12" fill="%23333"/><rect x="60" y="45" width="80" height="25" fill="%23333" opacity="0.7"/></svg>') no-repeat center;
+    background-size: contain;
+    animation: driftCar 2s ease-in-out infinite;
+    margin-bottom: 30px;
+}
+.loading-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 3em;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                 0 0 40px rgba(255, 215, 0, 0.6),
+                 3px 3px 0px #FF6B6B,
+                 6px 6px 0px #4A90E2;
+    margin-bottom: 15px;
+    animation: glowPulse 2s ease-in-out infinite;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.loading-subtitle {
+    font-family: 'Arial', sans-serif;
+    font-size: 1em;
+    color: #ccc;
+    margin-bottom: 40px;
+    text-align: center;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.loading-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #FF6B6B, #4A90E2, #FFD700);
+    background-size: 200% 100%;
+    border-radius: 2px;
+    animation: progressLoad 2.5s ease-in-out forwards, gradientShift 1s ease-in-out infinite;
+    width: 0%;
+}
+.loading-text {
+    font-size: 0.9em;
+    color: #999;
+    animation: fadeInOut 1.5s ease-in-out infinite;
+}
+.loading-particles {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+.particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #FFD700;
+    border-radius: 50%;
+    animation: floatParticles 4s ease-in-out infinite;
+}
+@keyframes driftCar {
+    0% { transform: translateX(-10px) rotate(-2deg); }
+    50% { transform: translateX(10px) rotate(2deg); }
+    100% { transform: translateX(-10px) rotate(-2deg); }
+}
+@keyframes glowPulse {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                     0 0 40px rgba(255, 215, 0, 0.6),
+                     3px 3px 0px #FF6B6B,
+                     6px 6px 0px #4A90E2;
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(255, 215, 0, 1),
+                     0 0 50px rgba(255, 215, 0, 0.8),
+                     3px 3px 0px #FF6B6B,
+                     6px 6px 0px #4A90E2;
+    }
+}
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+@keyframes progressLoad {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+@keyframes floatParticles {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
 </style>
-
     </style>
 </head>
 <body>
@@ -1338,6 +1454,71 @@
             }
         `;
         document.head.appendChild(style);
+	<body>
+  <!-- Loading screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-particles"></div>
+    <div class="loading-car"></div>
+    <div class="loading-title">spinquanta</div>
+    <div class="loading-subtitle">Prepare for the ultimate drift experience</div>
+    <div class="loading-progress">
+      <div class="loading-progress-bar"></div>
+    </div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <!-- Основна мініапка -->
+  <div class="container">
+    <!-- Весь твій попередній HTML-контент -->
+  </div>
+
+  <!-- Скрипт ініціалізації -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.querySelector('.container');
+      if (container) container.style.display = 'none';
+
+      const particlesContainer = document.querySelector('.loading-particles');
+      if (particlesContainer) {
+        for (let i = 0; i < 15; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.animationDelay = Math.random() * 4 + 's';
+          particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      const loadingTexts = [
+        'Loading engines...',
+        'Preparing tracks...',
+        'Tuning cars...',
+        'Ready to drift!'
+      ];
+      let textIndex = 0;
+      const loadingText = document.querySelector('.loading-text');
+      const textInterval = setInterval(() => {
+        if (textIndex < loadingTexts.length && loadingText) {
+          loadingText.textContent = loadingTexts[textIndex];
+          textIndex++;
+        } else {
+          clearInterval(textInterval);
+        }
+      }, 650);
+
+      setTimeout(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.classList.add('hide');
+        setTimeout(() => loadingScreen.style.display = 'none', 500);
+
+        if (container) container.style.display = 'block';
+        updateBalance();
+        updateFuelDisplay();
+      }, 2800);
+    });
+  </script>
+</body>
     </script>
 </body>
 </html>
