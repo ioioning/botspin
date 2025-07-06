@@ -103,16 +103,29 @@
             box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
         }
 
-        .background-cars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800"><defs><pattern id="garage" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="%23333"/><rect x="10" y="10" width="80" height="30" fill="%23555" opacity="0.3"/><rect x="20" y="50" width="60" height="40" fill="%23444" opacity="0.5"/></pattern></defs><rect width="400" height="800" fill="url(%23garage)"/></svg>') repeat;
-            opacity: 0.3;
-        }
-
+.background-cars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+    z-index: 1;
+}
+.racing-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(26, 26, 26, 0.3) 0%,
+        rgba(45, 45, 45, 0.2) 50%,
+        rgba(26, 26, 26, 0.4) 100%
+    );
+    z-index: 2;
+}
         .game-card {
             position: absolute;
             bottom: 20px;
@@ -592,15 +605,36 @@
   text-shadow: 3px 3px 0 #FF6B6B, 6px 6px 0 #4A90E2;
   letter-spacing: 4px;
 }
-<!-- React-додаток -->
-<div id="root" style="display:none;"></div>
+.dynamic-racing-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('racing-background.jpg') center/cover no-repeat;
+    opacity: 0.8;
+    z-index: -1;
+    animation: backgroundPulse 4s ease-in-out infinite;
+}
 
+@keyframes backgroundPulse {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% { 
+        transform: scale(1.05);
+        opacity: 0.6;
+    }
+}
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Main Game View -->
         <div id="gameView" class="game-view">
+            <div class="dynamic-racing-background"></div>
+            <div class="racing-overlay"></div>
             <div class="background-cars"></div>
             
             <div class="header">
@@ -1250,77 +1284,31 @@
 
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
-    const app = document.getElementById('root');
     loadingScreen.classList.add('hidden');
 
     setTimeout(() => {
         loadingScreen.style.display = 'none';
-        app.style.display = 'block'; // Показати React-додаток
     }, 500);
 }
 
 window.addEventListener('load', function() {
     showLoadingScreen();
 });
-</div>
 
-<!-- React-додаток -->
-<div id="root" style="display: none;"></div>
-
-<!-- React + Babel -->
-<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-<!-- React-компонент -->
-<script type="text/babel">
-    function LanguageLearningApp() {
-        const [words, setWords] = React.useState([
-            { id: 1, native: 'Привіт', foreign: 'Hello' },
-            { id: 2, native: 'Дякую', foreign: 'Thank you' },
-            { id: 3, native: 'Будь ласка', foreign: 'Please' },
-        ]);
-        const [showTranslation, setShowTranslation] = React.useState(words.map(() => false));
-
-        const toggleTranslation = (index) => {
-            const updated = [...showTranslation];
-            updated[index] = !updated[index];
-            setShowTranslation(updated);
-        };
-
-        return (
-            <div style={{ maxWidth: 400, margin: '0 auto', padding: 20 }}>
-                <h1>Language Learning App</h1>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
-                    {words.map((word, index) => (
-                        <li
-                            key={word.id}
-                            style={{
-                                marginBottom: 10,
-                                padding: 10,
-                                border: '1px solid #ccc',
-                                borderRadius: 5,
-                                cursor: 'pointer',
-                            }}
-                            onClick={() => toggleTranslation(index)}
-                        >
-                            <strong>{word.native}</strong>
-                            {showTranslation[index] && (
-                                <div style={{ marginTop: 5, color: '#555' }}>{word.foreign}</div>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+    </script>
+    <!-- Loading Screen -->
+<div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+        <div class="loading-logo">
+            <div class="font-spirit">DRIFTSPIN</div>
+        </div>
+        <div class="loading-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-        );
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<LanguageLearningApp />);
-</script>
-
-</body>
-</html>
-
+            <div class="loading-percentage" id="loadingPercentage">0%</div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
