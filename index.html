@@ -592,6 +592,8 @@
   text-shadow: 3px 3px 0 #FF6B6B, 6px 6px 0 #4A90E2;
   letter-spacing: 4px;
 }
+<!-- React-додаток -->
+<div id="root" style="display:none;"></div>
 
     </style>
 </head>
@@ -1248,32 +1250,77 @@
 
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
+    const app = document.getElementById('root');
     loadingScreen.classList.add('hidden');
 
     setTimeout(() => {
         loadingScreen.style.display = 'none';
+        app.style.display = 'block'; // Показати React-додаток
     }, 500);
 }
 
 window.addEventListener('load', function() {
     showLoadingScreen();
 });
-
-    </script>
-    <!-- Loading Screen -->
-<div id="loadingScreen" class="loading-screen">
-    <div class="loading-content">
-        <div class="loading-logo">
-            <div class="loading-car">🏎️</div>
-            <div class="font-spirit">DRIFTSPIN</div>
-        </div>
-        <div class="loading-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="loading-percentage" id="loadingPercentage">0%</div>
-        </div>
-    </div>
 </div>
+
+<!-- React-додаток -->
+<div id="root" style="display: none;"></div>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- React-компонент -->
+<script type="text/babel">
+    function LanguageLearningApp() {
+        const [words, setWords] = React.useState([
+            { id: 1, native: 'Привіт', foreign: 'Hello' },
+            { id: 2, native: 'Дякую', foreign: 'Thank you' },
+            { id: 3, native: 'Будь ласка', foreign: 'Please' },
+        ]);
+        const [showTranslation, setShowTranslation] = React.useState(words.map(() => false));
+
+        const toggleTranslation = (index) => {
+            const updated = [...showTranslation];
+            updated[index] = !updated[index];
+            setShowTranslation(updated);
+        };
+
+        return (
+            <div style={{ maxWidth: 400, margin: '0 auto', padding: 20 }}>
+                <h1>Language Learning App</h1>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    {words.map((word, index) => (
+                        <li
+                            key={word.id}
+                            style={{
+                                marginBottom: 10,
+                                padding: 10,
+                                border: '1px solid #ccc',
+                                borderRadius: 5,
+                                cursor: 'pointer',
+                            }}
+                            onClick={() => toggleTranslation(index)}
+                        >
+                            <strong>{word.native}</strong>
+                            {showTranslation[index] && (
+                                <div style={{ marginTop: 5, color: '#555' }}>{word.foreign}</div>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<LanguageLearningApp />);
+</script>
+
+</body>
+</html>
+
 </body>
 </html>
