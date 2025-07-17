@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Exchange Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: #000000;
+        }
+
+        .bot-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #ff8c00;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .main-content {
+            padding: 24px 20px;
+            flex: 1;
+        }
+
+        .exchange-section {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .token-input {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            color: #000000;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .token-input:focus {
+            border-color: #ff8c00;
+        }
+
+        .token-input::placeholder {
+            color: #999999;
+        }
+
+        .currency-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .currency-option {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .currency-option:hover {
+            background: #f0f0f0;
+            border-color: #d0d0d0;
+        }
+
+        .currency-option.selected {
+            border-color: #ff8c00;
+            background: #fff4e6;
+        }
+
+        .currency-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .exchange-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .exchange-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .exchange-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .exchange-rate {
+            font-size: 14px;
+            color: #ff8c00;
+            font-weight: 500;
+        }
+
+        .exchange-from, .exchange-to {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .exchange-label {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 8px;
+        }
+
+        .exchange-amount {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+
+        .exchange-currency {
+            font-size: 14px;
+            color: #666666;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .exchange-arrow {
+            text-align: center;
+            margin: 8px 0;
+            font-size: 18px;
+            color: #ff8c00;
+        }
+
+        .exchange-button {
+            background: #ff8c00;
+            color: #ffffff;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+
+        .exchange-button:hover {
+            background: #e67e00;
+        }
+
+        .exchange-button:disabled {
+            background: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
+        .recent-trades {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .trades-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 12px;
+        }
+
+        .trade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .trade-item:last-child {
+            border-bottom: none;
+        }
+
+        .trade-info {
+            font-size: 14px;
+            color: #000000;
+        }
+
+        .trade-amount {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .bottom-nav {
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-item.active {
+            background: #fff4e6;
+            color: #ff8c00;
+        }
+
+        .nav-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .nav-item.active .nav-text {
+            color: #ff8c00;
+        }
+
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .profile-content {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            width: 320px;
+            max-width: 90%;
+            border: 1px solid #e0e0e0;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+
+        .profile-balance {
+            font-size: 16px;
+            color: #666666;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .profile-button {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .profile-button:hover {
+            background: #f0f0f0;
+        }
+
+        .earn-button {
+            background: #ff8c00;
+            color: #ffffff;
+            border: none;
+        }
+
+        .earn-button:hover {
+            background: #e67e00;
+        }
+
+        .close-button {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            margin-top: 16px;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="bot-container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">T</div>
+                <div class="logo-text">TokenSwap</div>
+            </div>
+            <div class="balance">
+                <div>
+                    <div class="balance-amount">1,250</div>
+                    <div class="balance-label">Tokens</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="exchange-section">
+                <h2 class="section-title">Обмін Токенів</h2>
+                
+                <div class="input-group">
+                    <label class="input-label">Кількість токенів</label>
+                    <input type="number" class="token-input" id="tokenAmount" placeholder="0" oninput="calculateExchange()">
+                </div>
+
+                <div class="currency-selector">
+                    <div class="currency-option selected" onclick="selectCurrency(this, 'nft')" data-currency="nft">
+                        <div class="currency-name">NFT Gift</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'usd')" data-currency="usd">
+                        <div class="currency-name">USD</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'btc')" data-currency="btc">
+                        <div class="currency-name">Bitcoin</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'eth')" data-currency="eth">
+                        <div class="currency-name">Ethereum</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exchange-card">
+                <div class="exchange-header">
+                    <div class="exchange-title">Попередній перегляд</div>
+                    <div class="exchange-rate" id="currentRate">1 TOK = 5 NFT</div>
+                </div>
+
+                <div class="exchange-from">
+                    <div class="exchange-label">Віддаєте</div>
+                    <div class="exchange-amount" id="fromAmount">0</div>
+                    <div class="exchange-currency">
+                        <span>Telegram Tokens</span>
+                    </div>
+                </div>
+
+                <div class="exchange-arrow">↓</div>
+
+                <div class="exchange-to">
+                    <div class="exchange-label">Отримуєте</div>
+                    <div class="exchange-amount" id="toAmount">0</div>
+                    <div class="exchange-currency">
+                        <span id="toCurrencyName">NFT Подарунки</span>
+                    </div>
+                </div>
+
+                <button class="exchange-button" onclick="performExchange()">
+                    Обмінити Токени
+                </button>
+            </div>
+
+            <div class="recent-trades">
+                <div class="trades-title">Останні операції</div>
+                <div class="trade-item">
+                    <div class="trade-info">NFT Gift обмін</div>
+                    <div class="trade-amount">-50 TOK</div>
+                </div>
+                <div class="trade-item">
+                    <div class="trade-info">USD обмін</div>
+                    <div class="trade-amount">-100 TOK</div>
+                </div>
+                <div class="trade-item">
+                    <div class="trade-info">Bitcoin обмін</div>
+                    <div class="trade-amount">-200 TOK</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-text">Головна</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-text">Історія</div>
+            </div>
+            <div class="nav-item" onclick="openProfile()">
+                <div class="nav-text">Профіль</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="profile-title">Профіль</div>
+                <div class="profile-balance">Баланс: 1,250 токенів</div>
+            </div>
+            
+            <div class="profile-actions">
+                <div class="profile-button">
+                    <div>Налаштування</div>
+                </div>
+                <div class="profile-button">
+                    <div>Історія транзакцій</div>
+                </div>
+                <div class="profile-button earn-button" onclick="openEarnGame()">
+                    <div>Earn Tokens</div>
+                </div>
+                <div class="profile-button">
+                    <div>Допомога</div>
+                </div>
+            </div>
+            
+            <button class="close-button" onclick="closeProfile()">
+                Закрити
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCurrency = 'nft';
+        const exchangeRates = {
+            nft: { rate: 5, name: 'NFT Подарунки', unit: 'NFT' },
+            usd: { rate: 0.01, name: 'US Dollar', unit: 'USD' },
+            btc: { rate: 0.0001, name: 'Bitcoin', unit: 'BTC' },
+            eth: { rate: 0.001, name: 'Ethereum', unit: 'ETH' }
+        };
+
+        function selectCurrency(element, currency) {
+            // Видаляємо попередній вибір
+            document.querySelectorAll('.currency-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Додаємо вибір до поточного елемента
+            element.classList.add('selected');
+            selectedCurrency = currency;
+            
+            // Оновлюємо інформацію
+            updateCurrencyInfo();
+            calculateExchange();
+        }
+
+        function updateCurrencyInfo() {
+            const currency = exchangeRates[selectedCurrency];
+            document.getElementById('currentRate').textContent = `1 TOK = ${currency.rate} ${currency.unit}`;
+            document.getElementById('toCurrencyName').textContent = currency.name;
+        }
+
+        function calculateExchange() {
+            const tokenAmount = parseFloat(document.getElementById('tokenAmount').value) || 0;
+            const currency = exchangeRates[selectedCurrency];
+            const exchangeAmount = tokenAmount * currency.rate;
+            
+            document.getElementById('fromAmount').textContent = tokenAmount;
+            document.getElementById('toAmount').textContent = exchangeAmount.toFixed(currency.rate < 1 ? 6 : 0);
+        }
+
+        function performExchange() {
+            const tokenAmount = document.getElementById('tokenAmount').value;
+            
+            if (!tokenAmount || tokenAmount <= 0) {
+                alert('Будь ласка, введіть коректну кількість токенів');
+                return;
+            }
+
+            const button = document.querySelector('.exchange-button');
+            button.disabled = true;
+            button.innerHTML = 'Обробка...';
+            
+            setTimeout(() => {
+                button.innerHTML = 'Обмін завершено!';
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = 'Обмінити Токени';
+                    
+                    const currency = exchangeRates[selectedCurrency];
+                    const exchangeAmount = (tokenAmount * currency.rate).toFixed(currency.rate < 1 ? 6 : 0);
+                    alert(`Успішно обмінено ${tokenAmount} токенів на ${exchangeAmount} ${currency.unit}!`);
+                    
+                    // Оновлюємо баланс
+                    const currentBalance = parseInt(document.querySelector('.balance-amount').textContent.replace(',', ''));
+                    const newBalance = currentBalance - parseInt(tokenAmount);
+                    document.querySelector('.balance-amount').textContent = newBalance.toLocaleString();
+                    
+                    // Скидаємо форму
+                    document.getElementById('tokenAmount').value = '';
+                    calculateExchange();
+                }, 1000);
+            }, 1500);
+        }
+
+        function openProfile() {
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfile() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function openEarnGame() {
+            window.open('https://ioioning.github.io/botspin/', '_blank');
+        }
+
+        // Закриття модалки при кліку поза межами
+        document.getElementById('profileModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProfile();
+            }
+        });
+
+        // Ініціалізація
+        updateCurrencyInfo();
+    </script>
+</body>
+</html>
