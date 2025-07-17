@@ -681,28 +681,6 @@
             </div>
 
 	    
-        <!-- Garage View -->
-        <div id="garageView" class="market-view">
-            <div class="market-header">
-                <h1 class="market-title">GARAGE</h1>
-                <div class="market-balance">
-                    <span id="garageTokenBalance">100</span> PTS
-                </div>
-            </div>
-
-            <div class="cars-grid" id="garageGrid">
-                <div class="car-card" style="text-align: center; padding: 40px;">
-                    <div class="car-image">🚗</div>
-                    <div class="car-info">
-                        <div class="car-name">Garage</div>
-                        <div class="car-description">
-                            Coming soon...
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
             <div class="car-categories">
                 <div class="category-btn active" onclick="showCategory('cars')">Cars</div>
                 <div class="category-btn" onclick="showCategory('fuel')">Fuel</div>
@@ -799,17 +777,39 @@
             </div>
         </div>
 
-    <div class="bottom-nav">
-            <div class="nav-item active" onclick="showView('game')">
-                <div class="nav-label">Home</div>
+<!-- Garage View -->
+        <div id="garageView" class="market-view">
+            <div class="market-header">
+                <h1 class="market-title">GARAGE</h1>
+                <div class="market-balance">
+                    <span id="garageTokenBalance">100</span> PTS
+                </div>
             </div>
-            <div class="nav-item" onclick="showView('market')">
-                <div class="nav-label">Market</div>
-            </div>
-            <div class="nav-item" onclick="showView('garage')">
-                <div class="nav-label">Garage</div>
+
+            <div class="cars-grid" id="garageGrid">
+                <div class="car-card" style="text-align: center; padding: 40px;">
+                    <div class="car-image">🚗</div>
+                    <div class="car-info">
+                        <div class="car-name">Garage</div>
+                        <div class="car-description">
+                            Coming soon...
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+     <div class="bottom-nav">
+        <div class="nav-item active" onclick="showView('game')">
+            <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item" onclick="showView('market')">
+            <div class="nav-label">Market</div>
+        </div>
+        <div class="nav-item" onclick="showView('garage')">
+            <div class="nav-label">Garage</div>
+        </div>
+    </div>
 
     <script>
         let tokenBalance = 11350;
