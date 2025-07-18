@@ -810,7 +810,26 @@
             <div class="nav-label">Garage</div>
         </div>
     </div>
-
+    
+    <!-- Deposit Modal -->
+<div id="depositModal" class="deposit-modal">
+    <div class="deposit-content">
+        <h2 class="deposit-title">Deposit TON</h2>
+        <div class="deposit-address" id="depositAddress">
+            UQD2NmD_lH5f5u1Kj3KfGyTvhZSX0Eg6qp2a4RzAhPiVzRsZ
+        </div>
+        <button class="copy-btn" onclick="copyAddress()">
+            Copy Address
+        </button>
+        <div class="deposit-note">
+            Send TON to this address to deposit funds
+        </div>
+        <button class="close-btn" onclick="hideDepositModal()">
+            Close
+        </button>
+    </div>
+</div>
+	
     <script>
         let tokenBalance = 11350;
         let tonBalance = 0.00;
