@@ -926,39 +926,34 @@
             // Here you would implement the actual drift game
         }
 
-        
-        
-        function showView(viewName) {
-            const gameView = document.getElementById('gameView');
-            const marketView = document.getElementById('marketView');
-            const garageView = document.getElementById('garageView');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            // Remove active class from all nav items
-            navItems.forEach(item => item.classList.remove('active'));
-            
-            // Hide all views
-            gameView.style.display = 'none';
-            marketView.classList.remove('active');
-            garageView.classList.remove('active');
-            
-            if (viewName === 'game') {
-                gameView.style.display = 'block';
-                navItems[0].classList.add('active');
-            } else if (viewName === 'market') {
-                marketView.classList.add('active');
-                navItems[1].classList.add('active');
-            } else if (viewName === 'garage') {
-                    garageView.classList.add('active');
-                    navItems[2].classList.add('active');
-                    // Update garage token balance
-                    document.getElementById('garageTokenBalance').textContent = tokenBalance.toLocaleString();
-                }
-            }
-            
-            currentView = viewName;
-        }
+  function showView(viewName) {
+    const gameView = document.getElementById('gameView');
+    const marketView = document.getElementById('marketView');
+    const garageView = document.getElementById('garageView');
+    const navItems = document.querySelectorAll('.nav-item');
 
+    // Remove active class from all nav items
+    navItems.forEach(item => item.classList.remove('active'));
+
+    // Hide all views
+    gameView.style.display = 'none';
+    marketView.classList.remove('active');
+    garageView.classList.remove('active');
+
+    if (viewName === 'game') {
+        gameView.style.display = 'block';
+        navItems[0].classList.add('active');
+    } else if (viewName === 'market') {
+        marketView.classList.add('active');
+        navItems[1].classList.add('active');
+    } else if (viewName === 'garage') {
+        garageView.classList.add('active');
+        navItems[2].classList.add('active');
+        document.getElementById('garageTokenBalance').textContent = tokenBalance.toLocaleString();
+    }
+
+    currentView = viewName;
+}
         function showCategory(category) {
             const categoryBtns = document.querySelectorAll('.category-btn');
             categoryBtns.forEach(btn => btn.classList.remove('active'));
