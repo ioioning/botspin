@@ -921,7 +921,7 @@
             // Hide all views
             gameView.style.display = 'none';
             marketView.classList.remove('active');
-            if (garageView) garageView.classList.remove('active');
+            garageView.classList.remove('active');
             
             if (viewName === 'game') {
                 gameView.style.display = 'block';
@@ -930,7 +930,6 @@
                 marketView.classList.add('active');
                 navItems[1].classList.add('active');
             } else if (viewName === 'garage') {
-                if (garageView) {
                     garageView.classList.add('active');
                     navItems[2].classList.add('active');
                     // Update garage token balance
