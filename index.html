@@ -126,6 +126,35 @@
         );
     opacity: 0.3;
 }
+
+	/* ДОБАВЬТЕ ЭТИ СТИЛИ В ВАШ БЛОК <style> ПОСЛЕ СТРОКИ 115 (после .background-cars) */
+
+.game-view {
+    background-image: url('https://i.imgur.com/SkCo7LS.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Опциональный полупрозрачный оверлей для лучшей читаемости */
+.game-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2); /* Темный оверлей с 20% прозрачностью */
+    z-index: 0;
+}
+
+/* Убедитесь, что все элементы поверх фона */
+.game-view > * {
+    position: relative;
+    z-index: 1;
+}
         .game-card {
             position: absolute;
             bottom: 20px;
