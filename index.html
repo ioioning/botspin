@@ -636,6 +636,25 @@
     <div class="container">
         <!-- Main Game View -->
         <div id="gameView" class="game-view" style="background-image: url('https://i.imgur.com/G15sgSv.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+            <!-- Deposit Modal -->
+<div id="depositModal" class="deposit-modal">
+    <div class="deposit-content">
+        <div class="deposit-title">Deposit TON</div>
+        <div class="deposit-address" id="depositAddress">
+            UQBvI0aFLnw2QbZgjMPCLRdtRHxhUyinQudg6sdiohIwg5jL
+        </div>
+        <button class="copy-btn" onclick="copyAddress()">
+            Copy Address
+        </button>
+        <div class="deposit-note">
+            Send TON to this address. Balance will update automatically.
+        </div>
+        <button class="close-btn" onclick="hideDepositModal()">
+            Close
+        </button>
+    </div>
+</div>
             <div class="background-cars"></div>
             
             <div class="header">
@@ -799,22 +818,17 @@
             </div>
         </div>
 
-<div class="nav-item" id="garage-btn">
-    <i class="fas fa-car"></i>
-    <span>Garage</span>
-</div>
-     
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="showView('game')">
-                <div class="nav-label">Home</div>
-            </div>
-            <div class="nav-item" onclick="showView('market')">
-                <div class="nav-label">Market</div>
-            </div>
-        </div>
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="showView('game')">
+        <div class="nav-label">Home</div>
     </div>
-
+    <div class="nav-item" onclick="showView('market')">
+        <div class="nav-label">Market</div>
+    </div>
+    <div class="nav-item" onclick="showView('garage')">
+        <div class="nav-label">Garage</div>
+    </div>
+</div>
     <script>
         let tokenBalance = 11350;
         let tonBalance = 0.00;
@@ -911,27 +925,35 @@
             // Here you would implement the actual drift game
         }
 
-        function showView(viewName) {
-            const gameView = document.getElementById('gameView');
-            const marketView = document.getElementById('marketView');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            // Remove active class from all nav items
-            navItems.forEach(item => item.classList.remove('active'));
-            
-            if (viewName === 'game') {
-                gameView.style.display = 'block';
-                marketView.classList.remove('active');
-                navItems[0].classList.add('active');
-            } else if (viewName === 'market') {
-                gameView.style.display = 'none';
-                marketView.classList.add('active');
-                navItems[1].classList.add('active');
-            }
-            
-            currentView = viewName;
+function showView(viewName) {
+    const gameView = document.getElementById('gameView');
+    const marketView = document.getElementById('marketView');
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    // Remove active class from all nav items
+    navItems.forEach(item => item.classList.remove('active'));
+    
+    if (viewName === 'game') {
+        gameView.style.display = 'block';
+        marketView.classList.remove('active');
+        navItems[0].classList.add('active');
+    } else if (viewName === 'market') {
+        gameView.style.display = 'none';
+        marketView.classList.add('active');
+        navItems[1].classList.add('active');
+    } else if (viewName === 'garage') {
+        alert('Garage - Coming Soon! ');
+        if (currentView === 'game') {
+            navItems[0].classList.add('active');
+        } else {
+            navItems[1].classList.add('active');
         }
-
+    }
+    
+    if (viewName !== 'garage') {
+        currentView = viewName;
+    }
+}
         function showCategory(category) {
             const categoryBtns = document.querySelectorAll('.category-btn');
             categoryBtns.forEach(btn => btn.classList.remove('active'));
