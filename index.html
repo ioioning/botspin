@@ -630,6 +630,163 @@
     }
 }
 
+.garage-view {
+    display: none;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+}
+
+.garage-view.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.garage-header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    color: white;
+}
+
+.garage-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.garage-subtitle {
+    font-size: 1em;
+    color: #ccc;
+}
+
+.car-info-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 15px;
+    min-width: 160px;
+    color: white;
+}
+
+.car-info-panel h2 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+.car-stats {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    color: #ccc;
+}
+
+.car-stats strong {
+    color: white;
+}
+
+.garage-display {
+    flex: 1;
+    position: relative;
+}
+
+#garage-canvas-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.garage-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    z-index: 50;
+    color: #ffcc00;
+    text-align: center;
+}
+
+.garage-selector {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    padding: 15px;
+    border-radius: 20px;
+    z-index: 100;
+}
+
+.garage-cars-grid {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 5px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.garage-cars-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.garage-car-option {
+    min-width: 120px;
+    height: 120px;
+    background: rgba(40, 40, 40, 0.6);
+    border: 2px solid #555;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.garage-car-option:hover {
+    background: rgba(60, 60, 60, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(100, 150, 255, 0.2);
+}
+
+.garage-car-option.active {
+    border-color: #6fa8dc;
+    background: rgba(100, 150, 255, 0.15);
+    box-shadow: 0 0 15px rgba(100, 150, 255, 0.4);
+}
+
+.garage-car-preview {
+    width: 70px;
+    height: 40px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.garage-car-name {
+    font-size: 14px;
+    text-align: center;
+    color: #cccccc;
+    font-weight: bold;
+}
+
+.garage-car-option.active .garage-car-name {
+    color: #6fa8dc;
+}
     </style>
 </head>
 <body>
@@ -818,6 +975,31 @@
             </div>
         </div>
 
+<div id="garageView" class="garage-view">
+    <div class="garage-header">
+        <h1 class="garage-title">🏎️ ГАРАЖ</h1>
+        <p class="garage-subtitle">3D Автосалон</p>
+    </div>
+
+    <div class="car-info-panel" id="carInfo">
+        <h2 id="carModel">Спорткар</h2>
+        <div class="car-stats">⚡ <strong id="carSpeed">250</strong> км/ч</div>
+        <div class="car-stats">🔧 <strong id="carPower">350</strong> л.с.</div>
+        <div class="car-stats">⭐ <strong id="carRating">★★★★☆</strong></div>
+        <div class="car-stats">💰 <strong id="carPrice">2.5M</strong></div>
+    </div>
+
+    <div class="garage-display">
+        <div id="garage-canvas-container"></div>
+        <div class="garage-loading" id="garageLoading">Загрузка 3D сцены...</div>
+    </div>
+
+    <div class="garage-selector">
+        <div class="garage-cars-grid" id="garageCarsGrid">
+            <!-- Машины будут добавлены через JavaScript -->
+        </div>
+    </div>
+</div>
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showView('game')">
         <div class="nav-label">Home</div>
@@ -829,6 +1011,7 @@
         <div class="nav-label">Garage</div>
     </div>
 </div>
+
     <script>
         let tokenBalance = 11350;
         let tonBalance = 0.00;
@@ -1298,7 +1481,563 @@ function hideLoadingScreen() {
 window.addEventListener('load', function() {
     showLoadingScreen();
 });
+let garageScene, garageCamera, garageRenderer, currentGarageCar, garagePlatform;
+let garageCars = {};
+let selectedGarageCar = 'sports';
+let garageInitialized = false;
 
+// Данные автомобилей для гаража
+const garageCarData = {
+    sports: {
+        title: "Спорткар",
+        speed: 320,
+        power: 480,
+        rating: "★★★★★",
+        price: "3.2M",
+        color: 0xff4444
+    },
+    suv: {
+        title: "SUV", 
+        speed: 180,
+        power: 280,
+        rating: "★★★★☆",
+        price: "2.8M",
+        color: 0x44ff44
+    },
+    sedan: {
+        title: "Седан",
+        speed: 220,
+        power: 250,
+        rating: "★★★☆☆",
+        price: "1.8M",
+        color: 0x4444ff
+    },
+    truck: {
+        title: "Пикап",
+        speed: 160,
+        power: 320,
+        rating: "★★★★☆",
+        price: "2.2M",
+        color: 0xffaa44
+    },
+    electric: {
+        title: "Электро",
+        speed: 280,
+        power: 400,
+        rating: "★★★★★",
+        price: "4.1M",
+        color: 0x44ffff
+    },
+    classic: {
+        title: "Классик",
+        speed: 200,
+        power: 220,
+        rating: "★★★☆☆",
+        price: "1.5M",
+        color: 0x8844ff
+    },
+    race: {
+        title: "Гоночная",
+        speed: 380,
+        power: 520,
+        rating: "★★★★★",
+        price: "5.8M",
+        color: 0xff8844
+    },
+    luxury: {
+        title: "Люкс",
+        speed: 240,
+        power: 350,
+        rating: "★★★★☆",
+        price: "6.2M",
+        color: 0xff44ff
+    }
+};
+
+// Инициализация 3D гаража
+function initGarage() {
+    if (garageInitialized) return;
+    
+    const container = document.getElementById('garage-canvas-container');
+    
+    // Сцена
+    garageScene = new THREE.Scene();
+    garageScene.background = new THREE.Color(0x1a1a1a);
+
+    // Камера
+    garageCamera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+    garageCamera.position.set(5, 3, 6);
+    garageCamera.lookAt(0, 0, 0);
+
+    // Рендерер
+    garageRenderer = new THREE.WebGLRenderer({ antialias: true });
+    garageRenderer.setSize(container.offsetWidth, container.offsetHeight);
+    garageRenderer.shadowMap.enabled = true;
+    garageRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(garageRenderer.domElement);
+
+    // Освещение
+    setupGarageLighting();
+
+    // Платформа
+    createGaragePlatform();
+
+    // Создание автомобилей
+    createGarageCars();
+
+    // Установка начального автомобиля
+    selectGarageCar('sports');
+
+    // Обработчики событий
+    setupGarageEventListeners();
+
+    // Удаление индикатора загрузки
+    document.getElementById('garageLoading').style.display = 'none';
+
+    garageInitialized = true;
+
+    // Запуск анимации
+    animateGarage();
+}
+
+// Настройка освещения гаража
+function setupGarageLighting() {
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+    garageScene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(8, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    garageScene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffcc00, 0.3);
+    fillLight.position.set(-5, 5, -5);
+    garageScene.add(fillLight);
+
+    const spotLight = new THREE.SpotLight(0xffcc00, 0.6);
+    spotLight.position.set(0, 8, 0);
+    spotLight.angle = Math.PI / 4;
+    spotLight.penumbra = 0.2;
+    spotLight.castShadow = true;
+    garageScene.add(spotLight);
+}
+
+// Создание платформы гаража
+function createGaragePlatform() {
+    const geometry = new THREE.CylinderGeometry(2.5, 2.5, 0.15, 32);
+    const material = new THREE.MeshLambertMaterial({ 
+        color: 0x333333,
+        transparent: true,
+        opacity: 0.9
+    });
+    garagePlatform = new THREE.Mesh(geometry, material);
+    garagePlatform.position.y = -0.08;
+    garagePlatform.receiveShadow = true;
+    garageScene.add(garagePlatform);
+
+    // Светящееся кольцо
+    const ringGeometry = new THREE.RingGeometry(2.2, 2.4, 32);
+    const ringMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffcc00,
+        transparent: true,
+        opacity: 0.8
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.01;
+    garagePlatform.add(ring);
+
+    // Внутреннее кольцо
+    const innerRingGeometry = new THREE.RingGeometry(1.8, 2.0, 32);
+    const innerRingMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.4
+    });
+    const innerRing = new THREE.Mesh(innerRingGeometry, innerRingMaterial);
+    innerRing.rotation.x = -Math.PI / 2;
+    innerRing.position.y = 0.005;
+    garagePlatform.add(innerRing);
+}
+
+// Создание автомобилей гаража
+function createGarageCars() {
+    Object.keys(garageCarData).forEach(carType => {
+        garageCars[carType] = createGarageCar(garageCarData[carType].color, carType);
+    });
+}
+
+// Создание детализированного автомобиля
+function createGarageCar(color, type) {
+    const car = new THREE.Group();
+
+    // Основное тело автомобиля
+    let bodyGeometry;
+    switch(type) {
+        case 'sports':
+            bodyGeometry = new THREE.BoxGeometry(1.8, 0.5, 3.8);
+            break;
+        case 'suv':
+            bodyGeometry = new THREE.BoxGeometry(2.0, 1.0, 4.2);
+            break;
+        case 'sedan':
+            bodyGeometry = new THREE.BoxGeometry(1.9, 0.7, 4.0);
+            break;
+        case 'truck':
+            bodyGeometry = new THREE.BoxGeometry(2.2, 0.9, 3.5);
+            break;
+        default:
+            bodyGeometry = new THREE.BoxGeometry(1.8, 0.6, 3.8);
+    }
+
+    const bodyMaterial = new THREE.MeshPhongMaterial({ 
+        color: color,
+        shininess: 100,
+        specular: 0x222222
+    });
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    body.position.y = 0.4;
+    body.castShadow = true;
+    car.add(body);
+
+    // Крыша/кабина
+    const roofGeometry = new THREE.BoxGeometry(1.6, 0.4, 2.2);
+    const roofMaterial = new THREE.MeshPhongMaterial({ 
+        color: color,
+        shininess: 80
+    });
+    const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+    roof.position.y = 0.75;
+    roof.position.z = 0.3;
+    roof.castShadow = true;
+    car.add(roof);
+
+    // Стекла
+    const windowGeometry = new THREE.BoxGeometry(1.5, 0.35, 2.0);
+    const windowMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x87ceeb,
+        transparent: true,
+        opacity: 0.7,
+        shininess: 200
+    });
+    const windows = new THREE.Mesh(windowGeometry, windowMaterial);
+    windows.position.y = 0.77;
+    windows.position.z = 0.3;
+    car.add(windows);
+
+    // Колеса
+    const wheelGeometry = new THREE.CylinderGeometry(0.28, 0.28, 0.18, 16);
+    const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x1a1a1a });
+    
+    const wheelPositions = [
+        { x: -1.0, z: 1.4 },
+        { x: 1.0, z: 1.4 },
+        { x: -1.0, z: -1.4 },
+        { x: 1.0, z: -1.4 }
+    ];
+
+    wheelPositions.forEach(pos => {
+        const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+        wheel.rotation.z = Math.PI / 2;
+        wheel.position.set(pos.x, 0.28, pos.z);
+        wheel.castShadow = true;
+        car.add(wheel);
+
+        // Диски
+        const rimGeometry = new THREE.CylinderGeometry(0.18, 0.18, 0.08, 8);
+        const rimMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0xcccccc,
+            shininess: 150
+        });
+        const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+        rim.rotation.z = Math.PI / 2;
+        rim.position.set(pos.x, 0.28, pos.z);
+        car.add(rim);
+
+        // Центральная часть диска
+        const hubGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 6);
+        const hubMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0xffcc00,
+            shininess: 200
+        });
+        const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+        hub.rotation.z = Math.PI / 2;
+        hub.position.set(pos.x, 0.28, pos.z);
+        car.add(hub);
+    });
+
+    // Передние фары
+    const headlightGeometry = new THREE.SphereGeometry(0.08, 12, 12);
+    const headlightMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0xffffaa,
+        emissive: 0x444400,
+        shininess: 300
+    });
+    
+    const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+    const rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+    
+    leftHeadlight.position.set(-0.6, 0.35, 1.9);
+    rightHeadlight.position.set(0.6, 0.35, 1.9);
+    
+    car.add(leftHeadlight);
+    car.add(rightHeadlight);
+
+    // Задние фонари
+    const taillightMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0xff4444,
+        emissive: 0x440000,
+        shininess: 300
+    });
+    
+    const leftTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
+    const rightTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
+    
+    leftTaillight.position.set(-0.6, 0.35, -1.9);
+    rightTaillight.position.set(0.6, 0.35, -1.9);
+    
+    car.add(leftTaillight);
+    car.add(rightTaillight);
+
+    // Дополнительные детали для разных типов машин
+    if (type === 'truck') {
+        // Кузов для пикапа
+        const bedGeometry = new THREE.BoxGeometry(1.8, 0.3, 1.5);
+        const bedMaterial = new THREE.MeshPhongMaterial({ 
+            color: color,
+            shininess: 60
+        });
+        const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+        bed.position.y = 0.5;
+        bed.position.z = -1.2;
+        bed.castShadow = true;
+        car.add(bed);
+    }
+
+    car.visible = false;
+    garagePlatform.add(car);
+    return car;
+}
+
+// Создание опций выбора машин
+function createGarageCarOption(carType, index) {
+    const option = document.createElement('div');
+    option.className = `garage-car-option ${index === 0 ? 'active' : ''}`;
+    option.onclick = () => selectGarageCar(carType);
+    
+    const colorHex = `#${garageCarData[carType].color.toString(16).padStart(6, '0')}`;
+    
+    option.innerHTML = `
+        <div class="garage-car-preview" style="background: ${colorHex}"></div>
+        <div class="garage-car-name">${garageCarData[carType].title}</div>
+    `;
+    
+    option.setAttribute('data-garage-car', carType);
+    return option;
+}
+
+// Выбор автомобиля в гараже
+function selectGarageCar(carType) {
+    // Скрыть текущий автомобиль
+    if (currentGarageCar) {
+        currentGarageCar.visible = false;
+    }
+
+    // Показать новый автомобиль
+    currentGarageCar = garageCars[carType];
+    currentGarageCar.visible = true;
+    selectedGarageCar = carType;
+
+    // Обновить информацию
+    updateGarageCarInfo(carType);
+
+    // Обновить активное превью
+    updateGarageActivePreview(carType);
+}
+
+// Обновление информации о машине в гараже
+function updateGarageCarInfo(carType) {
+    const data = garageCarData[carType];
+    document.getElementById('carModel').textContent = data.title;
+    document.getElementById('carSpeed').textContent = data.speed;
+    document.getElementById('carPower').textContent = data.power;
+    document.getElementById('carRating').textContent = data.rating;
+    document.getElementById('carPrice').textContent = data.price;
+}
+
+// Обновление активного превью в гараже
+function updateGarageActivePreview(carType) {
+    document.querySelectorAll('.garage-car-option').forEach(option => {
+        option.classList.remove('active');
+    });
+    document.querySelector(`[data-garage-car="${carType}"]`)?.classList.add('active');
+}
+
+// Настройка обработчиков событий для гаража
+function setupGarageEventListeners() {
+    // Инициализация сетки машин
+    const garageCarsGrid = document.getElementById('garageCarsGrid');
+    Object.keys(garageCarData).forEach((carType, index) => {
+        const option = createGarageCarOption(carType, index);
+        garageCarsGrid.appendChild(option);
+    });
+
+    // Управление мышью/касанием
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    const canvas = garageRenderer.domElement;
+
+    // Мышь
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+
+        rotateGarageCamera(deltaX, deltaY);
+
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    // Касания
+    canvas.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        previousMousePosition = { x: touch.clientX, y: touch.clientY };
+        e.preventDefault();
+    });
+
+    canvas.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - previousMousePosition.x;
+        const deltaY = touch.clientY - previousMousePosition.y;
+
+        rotateGarageCamera(deltaX, deltaY);
+
+        previousMousePosition = { x: touch.clientX, y: touch.clientY };
+        e.preventDefault();
+    });
+
+    // Зум колесом мыши
+    canvas.addEventListener('wheel', (e) => {
+        const distance = garageCamera.position.distanceTo(new THREE.Vector3(0, 0, 0));
+        const newDistance = distance + e.deltaY * 0.01;
+        
+        if (newDistance > 2 && newDistance < 15) {
+            garageCamera.position.multiplyScalar(newDistance / distance);
+        }
+        e.preventDefault();
+    });
+}
+
+// Вращение камеры в гараже
+function rotateGarageCamera(deltaX, deltaY) {
+    const spherical = new THREE.Spherical();
+    spherical.setFromVector3(garageCamera.position);
+    spherical.theta -= deltaX * 0.01;
+    spherical.phi += deltaY * 0.01;
+    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+
+    garageCamera.position.setFromSpherical(spherical);
+    garageCamera.lookAt(0, 0, 0);
+}
+
+// Обработка изменения размера окна для гаража
+function onGarageWindowResize() {
+    if (!garageInitialized) return;
+    const container = document.getElementById('garage-canvas-container');
+    garageCamera.aspect = container.offsetWidth / container.offsetHeight;
+    garageCamera.updateProjectionMatrix();
+    garageRenderer.setSize(container.offsetWidth, container.offsetHeight);
+}
+
+// Анимационный цикл для гаража
+function animateGarage() {
+    if (!garageInitialized) return;
+    
+    requestAnimationFrame(animateGarage);
+
+    // Вращение платформы
+    if (garagePlatform) {
+        garagePlatform.rotation.y += 0.003;
+    }
+
+    // Легкая анимация автомобиля
+    if (currentGarageCar) {
+        currentGarageCar.position.y = Math.sin(Date.now() * 0.001) * 0.015;
+    }
+
+    garageRenderer.render(garageScene, garageCamera);
+}
+
+// Модифицируйте существующую функцию showView, чтобы добавить поддержку гаража:
+// Найдите функцию showView и замените ее на эту:
+function showView(viewName) {
+    const gameView = document.getElementById('gameView');
+    const marketView = document.getElementById('marketView');
+    const garageView = document.getElementById('garageView');
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    // Remove active class from all nav items
+    navItems.forEach(item => item.classList.remove('active'));
+    
+    if (viewName === 'game') {
+        gameView.style.display = 'block';
+        marketView.classList.remove('active');
+        garageView.classList.remove('active');
+        navItems[0].classList.add('active');
+    } else if (viewName === 'market') {
+        gameView.style.display = 'none';
+        marketView.classList.add('active');
+        garageView.classList.remove('active');
+        navItems[1].classList.add('active');
+    } else if (viewName === 'garage') {
+        gameView.style.display = 'none';
+        marketView.classList.remove('active');
+        garageView.classList.add('active');
+        navItems[2].classList.add('active');
+        
+        // Инициализация 3D гаража при первом открытии
+        if (!garageInitialized) {
+            setTimeout(() => {
+                initGarage();
+            }, 100);
+        } else {
+            // Обновить размеры рендерера при повторном открытии
+            setTimeout(() => {
+                onGarageWindowResize();
+            }, 100);
+        }
+    }
+    
+    currentView = viewName;
+}
+
+// Добавьте обработчик изменения размера окна для гаража
+window.addEventListener('resize', () => {
+    onWindowResize();
+    onGarageWindowResize();
+});
     </script>
     <div id="loadingScreen" class="loading-screen">
     <div class="speed-lines">
