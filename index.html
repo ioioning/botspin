@@ -35,7 +35,7 @@
             overflow-x: hidden;
             height: 100vh;
             width: 100vw;
-            max-width: none;
+            max-width: 400px;
             margin: 0 auto;
         }
 
@@ -43,7 +43,6 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
-	    max-width: none;
         }
 
         .header {
@@ -111,26 +110,25 @@
     min-height: 100vh !important;
 }
 
+/* Убираем старый фон с полосками */
 .background-cars {
     display: none;
 }
 
+/* Делаем карточку игры менее прозрачной */
 .game-card {
-   position: absolute;
-    bottom: 90px; /* увеличить с 20px до 90px */
-    left: 20px;
-    right: 20px;
-    background: transparent; /* вместо rgba(0, 0, 0, 0.7) */
-    backdrop-filter: none; /* убрать blur */
-    border: none; /* убрать границу */
+    background: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(15px);
 }
+
+/* Опциональный оверлей только для области под карточкой */
 .game-view::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 200px;
+    bottom: 200px; /* Не затрагивает область карточки */
     background: rgba(0, 0, 0, 0.1);
     z-index: 0;
     pointer-events: none;
@@ -241,7 +239,7 @@
         }
 
         .bottom-nav {
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
@@ -538,10 +536,10 @@
 .loading-screen {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 50%;
     transform: translateX(-50%);
-    width: 100vw;
-    max-width: none;
+    width: 100%;
+    max-width: 400px;
     height: 100vh;
     background-image: url('https://i.imgur.com/agglFS7.jpg');
     background-size: cover;
@@ -631,131 +629,7 @@
         width: 280px;
     }
 }
-/* ДОБАВЬТЕ ЭТИ СТИЛИ в секцию <style> */
 
-.map-fuel-section {
-    margin-bottom: 20px;
-}
-
-.map-selector-container {
-    background: linear-gradient(135deg, #2a4a6b 0%, #1a3a5b 100%);
-    border: 2px solid #4a7ba6;
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-    transition: all 0.3s ease;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.map-selector-container.expanded {
-    transform: translateY(-5px);
-    border-radius: 16px 16px 0 0;
-}
-
-.map-icon {
-    font-size: 2.2em;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.map-info {
-    flex: 1;
-    color: white;
-}
-
-.map-title {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 2px;
-}
-
-.map-subtitle {
-    font-size: 0.85em;
-    color: #b0c4de;
-    margin-bottom: 4px;
-}
-
-.map-current {
-    font-size: 0.9em;
-    color: #87ceeb;
-}
-
-.map-current span {
-    font-weight: bold;
-    color: white;
-}
-
-.change-btn {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    border: 2px solid #5ba0f2;
-    border-radius: 12px;
-    padding: 12px 20px;
-    color: white;
-    font-size: 0.9em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.change-btn:hover {
-    background: linear-gradient(135deg, #5ba0f2 0%, #4a90e2 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
-}
-
-.map-dropdown {
-    background: linear-gradient(135deg, #2a4a6b 0%, #1a3a5b 100%);
-    border: 2px solid #4a7ba6;
-    border-top: none;
-    border-radius: 0 0 16px 16px;
-    padding: 8px;
-    display: none;
-    gap: 8px;
-    flex-direction: column;
-    position: relative;
-    z-index: 10;
-}
-
-.map-dropdown.show {
-    display: flex;
-}
-
-.map-option {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9em;
-    font-weight: 500;
-}
-
-.map-option:hover {
-    background: rgba(74, 144, 226, 0.3);
-    border-color: #4a90e2;
-    transform: translateX(4px);
-}
-
-.map-option.selected {
-    background: rgba(74, 144, 226, 0.2);
-    border-color: #4a90e2;
-    color: #87ceeb;
-}
 .garage-view {
     display: none;
     height: 100vh;
@@ -964,30 +838,34 @@
                     </div>
                 </div>
 
-<div class="map-fuel-section">
-    <div class="map-selector-container">
-        <div class="map-icon">🗺️</div>
-        <div class="map-info">
-            <div class="map-title">Choose your map!</div>
-            <div class="map-subtitle">Select the perfect racing location</div>
-            <div class="map-current">Now: <span id="currentMapName">Desert</span>/4</div>
-        </div>
-        <button class="change-btn" onclick="toggleMapSelection()" id="changeBtn">
-            CHANGE
-        </button>
-    </div>
-    
-    <!-- Выпадающий список карт -->
-    <div class="map-dropdown" id="mapDropdown">
-        <div class="map-option" onclick="selectNewMap('Desert', this)">🏜️ Desert</div>
-        <div class="map-option" onclick="selectNewMap('City', this)">🏙️ City</div>
-        <div class="map-option" onclick="selectNewMap('Forest', this)">🌲 Forest</div>
-        <div class="map-option" onclick="selectNewMap('Beach', this)">🏖️ Beach</div>
-    </div>
-</div>
                 <button class="start-drift-btn" onclick="startDrift()">
                     Start Drift
                 </button>
+
+                <div class="expand-arrow" onclick="toggleExpand()">
+                    <span id="expandIcon">↑</span>
+                </div>
+
+                <div class="map-selection" id="mapSelection">
+                    <div class="map-card" onclick="selectMap('desert')">
+                        <h3>Desert</h3>
+                        <p>Sandy dunes and high speed</p>
+                    </div>
+                    <div class="map-card" onclick="selectMap('city')">
+                        <h3>City</h3>
+                        <p>Urban street racing</p>
+                    </div>
+                    <div class="map-card" onclick="selectMap('forest')">
+                        <h3>Forest</h3>
+                        <p>Dense woodland tracks</p>
+                    </div>
+                    <div class="map-card" onclick="selectMap('beach')">
+                        <h3>Beach</h3>
+                        <p>Coastal racing paradise</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Market View -->
         <div id="marketView" class="market-view">
@@ -1557,62 +1435,7 @@ function showView(viewName) {
                 container.appendChild(particle);
             }
         });
-// ДОБАВЬТЕ ЭТИ ФУНКЦИИ в секцию <script>
 
-let isMapDropdownOpen = false;
-let currentSelectedMap = 'Desert';
-
-function toggleMapSelection() {
-    const dropdown = document.getElementById('mapDropdown');
-    const container = document.querySelector('.map-selector-container');
-    const changeBtn = document.getElementById('changeBtn');
-    
-    isMapDropdownOpen = !isMapDropdownOpen;
-    
-    if (isMapDropdownOpen) {
-        dropdown.classList.add('show');
-        container.classList.add('expanded');
-        changeBtn.textContent = 'CLOSE';
-    } else {
-        dropdown.classList.remove('show');
-        container.classList.remove('expanded');
-        changeBtn.textContent = 'CHANGE';
-    }
-}
-
-function selectNewMap(mapName, element) {
-    // Убрать выделение со всех опций
-    document.querySelectorAll('.map-option').forEach(option => {
-        option.classList.remove('selected');
-    });
-    
-    // Выделить выбранную опцию
-    element.classList.add('selected');
-    
-    // Обновить текущую карту
-    currentSelectedMap = mapName;
-    selectedMap = mapName.toLowerCase();
-    document.getElementById('currentMapName').textContent = mapName;
-    
-    // Закрыть dropdown через небольшую задержку
-    setTimeout(() => {
-        toggleMapSelection();
-        
-        // Показать уведомление
-        setTimeout(() => {
-            alert(`Map selected: ${mapName.toUpperCase()} 🗺️`);
-        }, 300);
-    }, 200);
-}
-
-// ЗАМЕНИТЕ старые функции toggleExpand и selectMap на заглушки или удалите их
-function toggleExpand() {
-    // Функция больше не используется
-}
-
-function selectMap(mapType) {
-    // Функция больше не используется, логика перенесена в selectNewMap
-}
         // Add CSS animation for floating particles
         const style = document.createElement('style');
         style.textContent = `
@@ -2224,4 +2047,3 @@ window.addEventListener('resize', () => {
     </div>
 </div>
 </body>
-</html>
