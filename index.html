@@ -667,7 +667,7 @@
   text-shadow: 3px 3px 0 #FF6B6B, 6px 6px 0 #4A90E2;
   letter-spacing: 4px;
 }
-	.speed-lines {
+.speed-lines {
     position: absolute;
     top: 0;
     left: 0;
@@ -1546,32 +1546,21 @@ function showView(viewName) {
                 50% { transform: translateY(-20px) rotate(180deg); }
             }
         `;
-        document.head.appendChild(style);
-function showLoadingScreen() {
-    let progress = 0;
-    const loadingInterval = setInterval(() => {
-        progress += Math.random() * 15 + 5;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(loadingInterval);
 
+// Простое управление загрузочным экраном
+document.addEventListener('DOMContentLoaded', function() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    
+    // Скрыть загрузочный экран через 2 секунды
+    setTimeout(() => {
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
             setTimeout(() => {
-                hideLoadingScreen();
+                loadingScreen.style.display = 'none';
             }, 500);
         }
-
-    }, 150);
-}
-
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.classList.add('hidden');
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
+    }, 2000);
+});
 
 // Простая загрузка без интервала
 window.addEventListener('load', function() {
