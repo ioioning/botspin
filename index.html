@@ -59,14 +59,13 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        .balance-section {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            text-align: right;
-        }
-        
+  .balance-section {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    text-align: right;
+}
 .balance-item {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
@@ -1077,6 +1076,7 @@
         let ownedCars = [];
         let selectedMap = null;
         let fuelAmount = 10;
+	let currentView = 'game';
 
         function updateBalance() {
             document.getElementById('tokenBalance').textContent = tokenBalance.toLocaleString();
@@ -1193,34 +1193,44 @@ function selectNewMap(mapName) {
             alert(`Starting drift race on ${selectedMap.toUpperCase()}!`);
             // Here you would implement the actual drift game
         }
-
 function showView(viewName) {
     const gameView = document.getElementById('gameView');
     const marketView = document.getElementById('marketView');
+    const garageView = document.getElementById('garageView');
     const navItems = document.querySelectorAll('.nav-item');
     
     // Remove active class from all nav items
     navItems.forEach(item => item.classList.remove('active'));
     
+    // Hide all views first
+    gameView.style.display = 'none';
+    marketView.classList.remove('active');
+    garageView.classList.remove('active');
+    
     if (viewName === 'game') {
         gameView.style.display = 'block';
-        marketView.classList.remove('active');
         navItems[0].classList.add('active');
+        currentView = 'game';
     } else if (viewName === 'market') {
-        gameView.style.display = 'none';
         marketView.classList.add('active');
         navItems[1].classList.add('active');
+        currentView = 'market';
     } else if (viewName === 'garage') {
-        alert('Garage - Coming Soon! ');
-        if (currentView === 'game') {
-            navItems[0].classList.add('active');
+        garageView.classList.add('active');
+        navItems[2].classList.add('active');
+        currentView = 'garage';
+        
+        // Инициализация 3D гаража при первом открытии
+        if (!garageInitialized) {
+            setTimeout(() => {
+                initGarage();
+            }, 100);
         } else {
-            navItems[1].classList.add('active');
+            // Обновить размеры рендерера при повторном открытии
+            setTimeout(() => {
+                onGarageWindowResize();
+            }, 100);
         }
-    }
-    
-    if (viewName !== 'garage') {
-        currentView = viewName;
     }
 }
         function showCategory(category) {
