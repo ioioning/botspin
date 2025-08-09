@@ -608,7 +608,6 @@
     background: rgba(100, 150, 255, 0.3);
     border-color: #4A90E2;
 } 
-
 .loading-screen {
     position: fixed;
     top: 0;
@@ -625,11 +624,8 @@
     align-items: center;
     justify-content: center;
     z-index: 9999;
+    opacity: 1;
     transition: opacity 0.5s ease;
-}
-.loading-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
 }
 .loading-content {
     text-align: center;
@@ -1561,6 +1557,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 2000);
 });
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    loadingScreen.classList.add('hidden');
+
+    setTimeout(() => {
+        loadingScreen.style.display = 'none';
+    }, 500);
+}
 
 // Простая загрузка без интервала
 window.addEventListener('load', function() {
