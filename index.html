@@ -115,10 +115,21 @@
     display: none;
 }
 
-/* Делаем карточку игры менее прозрачной */
 .game-card {
-    background: rgba(0, 0, 0, 0.85) !important;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(30, 40, 60, 0.95);
     backdrop-filter: blur(15px);
+    border: 2px solid rgba(100, 150, 255, 0.3);
+    border-radius: 20px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.game-card.expanded {
+    transform: translateY(-150px);
 }
 
 /* Опциональный оверлей только для области под карточкой */
@@ -189,37 +200,13 @@
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
         }
 
-        .expand-arrow {
-            text-align: center;
-            cursor: pointer;
-            font-size: 1.5em;
-            color: #0098EA;
-            transition: transform 0.3s ease;
-        }
 
         .expand-arrow:hover {
             transform: scale(1.2);
         }
 
-        .map-selection {
-            display: none;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
         .map-selection.show {
             display: grid;
-        }
-
-        .map-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .map-card:hover {
@@ -531,7 +518,97 @@
             border-radius: 10px;
             transform: rotate(15deg);
         }
- 
+.tank-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(20, 30, 45, 0.9);
+    border: 1px solid rgba(100, 150, 255, 0.4);
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+.tank-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.tank-icon {
+    font-size: 2em;
+    color: #4A90E2;
+}
+
+.tank-text {
+    color: white;
+}
+
+.tank-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.tank-subtitle {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.tank-counter {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.change-btn {
+    background: linear-gradient(135deg, #4A90E2, #0098EA);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.change-btn:hover {
+    transform: translateY(-2px);
+}
+
+.map-selector {
+    display: none;
+    margin-top: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.map-selector.show {
+    display: grid;
+}
+
+.map-option {
+    background: rgba(40, 50, 70, 0.8);
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 0.85em;
+}
+
+.map-option:hover {
+    background: rgba(100, 150, 255, 0.2);
+    border-color: #4A90E2;
+}
+
+.map-option.selected {
+    background: rgba(100, 150, 255, 0.3);
+    border-color: #4A90E2;
+} 
 
 .loading-screen {
     position: fixed;
@@ -832,40 +909,26 @@
                 </button>
             </div>
 
-            <div class="game-card" id="gameCard">
-                <div class="game-header">
-                    <div style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
-                    </div>
-                </div>
-
-                <button class="start-drift-btn" onclick="startDrift()">
-                    Start Drift
-                </button>
-
-                <div class="expand-arrow" onclick="toggleExpand()">
-                    <span id="expandIcon">↑</span>
-                </div>
-
-                <div class="map-selection" id="mapSelection">
-                    <div class="map-card" onclick="selectMap('desert')">
-                        <h3>Desert</h3>
-                        <p>Sandy dunes and high speed</p>
-                    </div>
-                    <div class="map-card" onclick="selectMap('city')">
-                        <h3>City</h3>
-                        <p>Urban street racing</p>
-                    </div>
-                    <div class="map-card" onclick="selectMap('forest')">
-                        <h3>Forest</h3>
-                        <p>Dense woodland tracks</p>
-                    </div>
-                    <div class="map-card" onclick="selectMap('beach')">
-                        <h3>Beach</h3>
-                        <p>Coastal racing paradise</p>
-                    </div>
-                </div>
-            </div>
+<div class="tank-section">
+    <div class="tank-info">
+        <div class="tank-icon">🗺️</div>
+        <div class="tank-text">
+            <div class="tank-title">Select your map!</div>
+            <div class="tank-subtitle">Choose the track for the race!</div>
+            <div class="tank-counter">Now: <span id="selectedMapName">None</span></div>
         </div>
+    </div>
+    <button class="change-btn" onclick="toggleMapSelector()">CHANGE</button>
+</div>
+
+<div class="map-selector" id="mapSelector">
+    <div class="map-option" onclick="selectNewMap('Desert')">Desert</div>
+    <div class="map-option" onclick="selectNewMap('City')">City</div>
+    <div class="map-option" onclick="selectNewMap('Forest')">Forest</div>
+    <div class="map-option" onclick="selectNewMap('Beach')">Beach</div>
+</div>
+
+<button class="start-drift-btn" onclick="startDrift()">START DRIFT</button>
 
         <!-- Market View -->
         <div id="marketView" class="market-view">
@@ -1027,7 +1090,36 @@
                 fuelDisplay.textContent = fuelAmount;
             }
         }
+function toggleMapSelector() {
+    const mapSelector = document.getElementById('mapSelector');
+    const gameCard = document.getElementById('gameCard');
+    
+    if (mapSelector.classList.contains('show')) {
+        mapSelector.classList.remove('show');
+        gameCard.classList.remove('expanded');
+    } else {
+        mapSelector.classList.add('show');
+        gameCard.classList.add('expanded');
+    }
+}
 
+function selectNewMap(mapName) {
+    document.getElementById('selectedMapName').textContent = mapName;
+    selectedMap = mapName.toLowerCase();
+    
+    // Убрать выделение со всех карт
+    document.querySelectorAll('.map-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    // Выделить выбранную карту
+    event.target.classList.add('selected');
+    
+    // Скрыть селектор
+    setTimeout(() => {
+        toggleMapSelector();
+    }, 300);
+}
         function showDepositModal() {
             document.getElementById('depositModal').classList.add('show');
         }
