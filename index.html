@@ -1547,9 +1547,7 @@ function showView(viewName) {
             }
         `;
         document.head.appendChild(style);
-	function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-
+function showLoadingScreen() {
     let progress = 0;
     const loadingInterval = setInterval(() => {
         progress += Math.random() * 15 + 5;
@@ -1567,15 +1565,21 @@ function showView(viewName) {
 
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
-    loadingScreen.classList.add('hidden');
-
-    setTimeout(() => {
-        loadingScreen.style.display = 'none';
-    }, 500);
+    if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
 }
 
+// Простая загрузка без интервала
 window.addEventListener('load', function() {
-    showLoadingScreen();
+    setTimeout(() => {
+        hideLoadingScreen();
+    }, 2000); // 2 секунды загрузки
+
+});
 });
 let garageScene, garageCamera, garageRenderer, currentGarageCar, garagePlatform;
 let garageCars = {};
