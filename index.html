@@ -116,6 +116,51 @@
             display: none;
         }
 
+        .fuel-info {
+            position: absolute;
+            bottom: 200px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .fuel-title {
+            font-size: 1.2em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .fuel-amount {
+            font-size: 2em;
+            color: #FF6B6B;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .fuel-get-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF4757);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .fuel-get-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
         .game-card {
             background: rgba(0, 0, 0, 0.85) !important;
             backdrop-filter: blur(15px);
@@ -276,10 +321,11 @@
         /* Market View Styles - New Design */
         .market-view {
             display: none;
-            padding: 20px 20px 100px 20px;
+            padding: 0;
             height: 100vh;
             overflow-y: auto;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            position: relative;
         }
 
         .market-view.active {
@@ -287,15 +333,16 @@
         }
 
         .market-header {
-            text-align: center;
-            margin-bottom: 20px;
             position: sticky;
             top: 0;
+            text-align: center;
+            margin-bottom: 0;
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
-            padding: 10px 0;
-            border-radius: 15px;
-            z-index: 100;
+            padding: 20px 20px 10px 20px;
+            border-radius: 0;
+            z-index: 150;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .market-title {
@@ -314,16 +361,16 @@
 
         /* Unified Category Bar */
         .car-categories {
+            position: sticky;
+            top: 90px;
             display: flex;
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 25px;
-            margin: 20px 0;
+            margin: 0 20px 20px 20px;
             padding: 4px;
-            position: sticky;
-            top: 80px;
-            z-index: 99;
+            z-index: 140;
         }
 
         .category-btn {
@@ -357,7 +404,8 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
-            margin-bottom: 20px;
+            margin: 0 20px 100px 20px;
+            padding: 0;
         }
 
         .car-card {
@@ -722,6 +770,14 @@
                 </button>
             </div>
 
+            <div class="fuel-info">
+                <div class="fuel-title">⛽ FUEL</div>
+                <div class="fuel-amount"><span id="mainFuelDisplay">3</span>/10</div>
+                <button class="fuel-get-btn" onclick="goToFuelMarket()">
+                    GET FUEL
+                </button>
+            </div>
+
             <div class="game-card" id="gameCard">
                 <div class="game-header">
                     <div style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
@@ -756,7 +812,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Market View -->
         <div id="marketView" class="market-view">
             <div class="market-header">
@@ -1081,7 +1137,7 @@
         let currentView = 'game';
         let ownedCars = [];
         let selectedMap = null;
-        let fuelAmount = 10;
+        let fuelAmount = 3;
 
         // Garage variables
         let garageScene, garageCamera, garageRenderer, currentGarageCar, garagePlatform;
@@ -1165,9 +1221,18 @@
 
         function updateFuelDisplay() {
             const fuelDisplay = document.getElementById('fuelDisplay');
+            const mainFuelDisplay = document.getElementById('mainFuelDisplay');
             if (fuelDisplay) {
                 fuelDisplay.textContent = fuelAmount;
             }
+            if (mainFuelDisplay) {
+                mainFuelDisplay.textContent = fuelAmount;
+            }
+        }
+
+        function goToFuelMarket() {
+            showView('market');
+            showCategory('fuel');
         }
 
         function showDepositModal() {
@@ -1229,6 +1294,11 @@
         }
 
         function startDrift() {
+            if (fuelAmount <= 0) {
+                alert('Not enough fuel! Get more fuel first.');
+                return;
+            }
+            
             if (!selectedMap) {
                 alert('Please select a map first!');
                 if (!isExpanded) {
@@ -1237,9 +1307,11 @@
                 return;
             }
             
-            alert(`Starting drift race on ${selectedMap.toUpperCase()}!`);
+            fuelAmount -= 1;
+            updateFuelDisplay();
+            alert(`Starting drift race on ${selectedMap.toUpperCase()}! Fuel: ${fuelAmount}/10`);
         }
-
+        
         function showView(viewName) {
             const gameView = document.getElementById('gameView');
             const marketView = document.getElementById('marketView');
@@ -1386,7 +1458,7 @@
             const carsGrid = document.getElementById('carsGrid');
             carsGrid.innerHTML = `
                 <!-- Fuel Pack 1 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/FpqN2Hs.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/yLfGooq.jpg');">
                     <div class="car-multiplier">+10</div>
                     <div class="car-price">100 PTS</div>
                     <div class="car-content">
@@ -1477,6 +1549,7 @@
                 if (canAfford) {
                     tokenBalance -= price;
                     fuelAmount += amount;
+                    if (fuelAmount > 10) fuelAmount = 10; // Max fuel cap
                     updateBalance();
                     updateFuelDisplay();
                     alert(`Successfully bought ${amount} fuel units!`);
@@ -1488,6 +1561,7 @@
                 if (canAfford) {
                     tonBalance -= price;
                     fuelAmount += amount;
+                    if (fuelAmount > 10) fuelAmount = 10; // Max fuel cap
                     updateBalance();
                     updateFuelDisplay();
                     alert(`Successfully bought ${amount} fuel units!`);
