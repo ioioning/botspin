@@ -1371,12 +1371,14 @@
             const carsGrid = document.getElementById('carsGrid');
             carsGrid.innerHTML = `
                 <!-- Car 1 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/dIn795X.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/8vHbP4K.jpg');">
                     <div class="car-multiplier">X1.2</div>
                     <div class="car-price">500 PTS</div>
                     <div class="car-content">
                         <div class="car-name">MSport-R34 • Uncommon</div>
                         <div class="car-rarity">Balanced technology and control</div>
+                        <div class="car-description">
+                            A balance of technology and insane control, where every second in drift feels perfect...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyCar('msp-r34', 500, 'tokens')">
@@ -1392,6 +1394,8 @@
                     <div class="car-content">
                         <div class="car-name">Velocity-A146 • Rare</div>
                         <div class="car-rarity">Precision handling master</div>
+                        <div class="car-description">
+                            The A146 car is agile with precise handling. Its reliability has made it a favorite among drifters...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyCar('vel-a146', 0.5, 'ton')">
@@ -1407,6 +1411,8 @@
                     <div class="car-content">
                         <div class="car-name">Thunder-X9 • Epic</div>
                         <div class="car-rarity">Ultimate racing machine</div>
+                        <div class="car-description">
+                            The most powerful car in the garage. Built for professional racers who demand perfection...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyCar('thu-x9', 2000, 'tokens')">
@@ -1421,6 +1427,8 @@
                     <div class="car-content">
                         <div class="car-name">Drift-K33 • Legendary</div>
                         <div class="car-rarity">Street racing legend</div>
+                        <div class="car-description">
+                            A legendary street racing car that has dominated underground circuits for years...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyCar('dri-k33', 1.2, 'ton')">
@@ -1435,6 +1443,7 @@
                     <div class="car-content">
                         <div class="car-name">Nitro-S15 • Rare</div>
                         <div class="car-rarity">Speed demon</div>
+                        <div class="car-description">
                             Built for speed with advanced nitrous systems. Perfect for straight-line racing...
                         </div>
                     </div>
@@ -1449,12 +1458,14 @@
             const carsGrid = document.getElementById('carsGrid');
             carsGrid.innerHTML = `
                 <!-- Fuel Pack 1 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/5TU1oCg.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/FpqN2Hs.jpg');">
                     <div class="car-multiplier">+10</div>
                     <div class="car-price">100 PTS</div>
                     <div class="car-content">
                         <div class="car-name">Basic Fuel Pack</div>
                         <div class="car-rarity">Standard fuel for racing</div>
+                        <div class="car-description">
+                            Essential fuel pack for basic racing. Provides 10 units of high-quality gasoline for your adventures...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyFuel('basic-fuel', 100, 'tokens', 10)">
@@ -1463,12 +1474,14 @@
                 </div>
 
                 <!-- Fuel Pack 2 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/OxUIvlq.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/HGkL9mP.jpg');">
                     <div class="car-multiplier">+25</div>
                     <div class="car-price">200 PTS</div>
                     <div class="car-content">
                         <div class="car-name">Premium Fuel Pack</div>
                         <div class="car-rarity">High-performance fuel</div>
+                        <div class="car-description">
+                            Premium fuel pack with better efficiency. Perfect for extended racing sessions and competitions...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyFuel('premium-fuel', 200, 'tokens', 25)">
@@ -1477,13 +1490,15 @@
                 </div>
 
                 <!-- Fuel Pack 3 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/OxUIvlq.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/8TnFjPw.jpg');">
                     <div class="car-multiplier">+50</div>
                     <div class="car-price ton">0.1 TON</div>
                     <div class="new-badge">NEW</div>
                     <div class="car-content">
                         <div class="car-name">Super Fuel Pack</div>
                         <div class="car-rarity">Professional grade fuel</div>
+                        <div class="car-description">
+                            Professional grade fuel for serious racers. Provides maximum performance and efficiency for pros...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyFuel('super-fuel', 0.1, 'ton', 50)">
@@ -1492,12 +1507,14 @@
                 </div>
 
                 <!-- Fuel Pack 4 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/OxUIvlq.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/VqWx3Lm.jpg');">
                     <div class="car-multiplier">+100</div>
                     <div class="car-price">1000 PTS</div>
                     <div class="car-content">
                         <div class="car-name">Mega Fuel Pack</div>
                         <div class="car-rarity">Ultimate fuel reserve</div>
+                        <div class="car-description">
+                            The ultimate fuel pack for marathon racing. Contains 100 units of premium fuel for endless racing...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyFuel('mega-fuel', 1000, 'tokens', 100)">
@@ -1506,13 +1523,15 @@
                 </div>
 
                 <!-- Fuel Pack 5 -->
-                <div class="car-card" style="background-image: url('https://i.imgur.com/OxUIvlq.jpg');">
+                <div class="car-card" style="background-image: url('https://i.imgur.com/QpLn8vT.jpg');">
                     <div class="car-multiplier">+200</div>
                     <div class="car-price ton">0.3 TON</div>
                     <div class="new-badge">NEW</div>
                     <div class="car-content">
                         <div class="car-name">Ultra Fuel Pack</div>
                         <div class="car-rarity">Legendary fuel reserve</div>
+                        <div class="car-description">
+                            The legendary fuel pack for professional racers. Unlimited racing potential with premium quality...
                         </div>
                     </div>
                     <button class="buy-btn" onclick="buyFuel('ultra-fuel', 0.3, 'ton', 200)">
