@@ -672,14 +672,21 @@
             animation: bounce 1.5s ease-in-out infinite;
         }
 
-        .loading-text {
-            font-size: 3em;
-            font-weight: bold;
-            color: #FFD700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            letter-spacing: 3px;
-        }
-
+.loading-text {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 15vw;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #ffcc00;
+    transform: skewX(-20deg);
+    text-shadow: 
+        4px 4px 0 #000000,
+        8px 8px 0 #333333;
+    filter: url(#grungeFilter);
+    position: relative;
+    left: -2vw;
+}
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -948,20 +955,45 @@
             </div>
         </div>
 
-        <div id="loadingScreen" class="loading-screen">
-            <div class="speed-lines">
-                <div class="speed-line"></div>
-                <div class="speed-line"></div>
-                <div class="speed-line"></div>
-            </div>
+<div id="loadingScreen" class="loading-screen">
+    <div class="speed-lines">
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+        <div class="speed-line"></div>
+    </div>
 
-            <div class="loading-content">
-                <div class="loading-logo">
-                    <div class="font-spirit">DRIFTSPIN</div>
-                </div>
-            </div>
+    <div class="loading-content">
+        <div class="loading-logo">
+            <div class="loading-text">DRIFTSPIN</div>
         </div>
     </div>
+    
+    <svg width="0" height="0" style="position: absolute;">
+      <defs>
+        <filter id="grungeFilter">
+          <feTurbulence type="turbulence" 
+                        baseFrequency="0.05" 
+                        numOctaves="2" 
+                        result="turbulence"
+                        seed="123"/>
+          
+          <feColorMatrix in="turbulence" 
+                         type="luminance" 
+                         result="texture"/>
+          
+          <feComposite in="SourceGraphic" 
+                       in2="texture" 
+                       operator="in" 
+                       result="final"/>
+          
+          <feMerge>
+            <feMergeNode in="SourceGraphic"/>
+            <feMergeNode in="final"/>
+          </feMerge>
+        </filter>
+      </defs>
+    </svg>
+</div>
 
     <style>
         /* Garage View Styles */
