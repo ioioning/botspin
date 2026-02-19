@@ -1822,136 +1822,448 @@
           });
         }
 
-        function createGarageCar(color, type) {
-          const car = new THREE.Group();
-          let bodyGeometry;
-          switch (type) {
-            case 'sports':
-              bodyGeometry = new THREE.BoxGeometry(1.8, 0.5, 3.8);
-              break;
-            case 'suv':
-              bodyGeometry = new THREE.BoxGeometry(2.0, 1.0, 4.2);
-              break;
-            case 'sedan':
-              bodyGeometry = new THREE.BoxGeometry(1.9, 0.7, 4.0);
-              break;
-            case 'truck':
-              bodyGeometry = new THREE.BoxGeometry(2.2, 0.9, 3.5);
-              break;
-            default:
-              bodyGeometry = new THREE.BoxGeometry(1.8, 0.6, 3.8);
-          }
-          const bodyMaterial = new THREE.MeshPhongMaterial({
-            color: color,
-            shininess: 100,
-            specular: 0x222222
-          });
-          const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-          body.position.y = 0.4;
-          body.castShadow = true;
-          car.add(body);
-          const roofGeometry = new THREE.BoxGeometry(1.6, 0.4, 2.2);
-          const roofMaterial = new THREE.MeshPhongMaterial({
-            color: color,
-            shininess: 80
-          });
-          const roof = new THREE.Mesh(roofGeometry, roofMaterial);
-          roof.position.y = 0.75;
-          roof.position.z = 0.3;
-          roof.castShadow = true;
-          car.add(roof);
-          const windowGeometry = new THREE.BoxGeometry(1.5, 0.35, 2.0);
-          const windowMaterial = new THREE.MeshPhongMaterial({
-            color: 0x87ceeb,
-            transparent: true,
-            opacity: 0.7,
-            shininess: 200
-          });
-          const windows = new THREE.Mesh(windowGeometry, windowMaterial);
-          windows.position.y = 0.77;
-          windows.position.z = 0.3;
-          car.add(windows);
-          const wheelGeometry = new THREE.CylinderGeometry(0.28, 0.28, 0.18, 16);
-          const wheelMaterial = new THREE.MeshPhongMaterial({
-            color: 0x1a1a1a
-          });
-          const wheelPositions = [{
-            x: -1.0,
-            z: 1.4
-          }, {
-            x: 1.0,
-            z: 1.4
-          }, {
-            x: -1.0,
-            z: -1.4
-          }, {
-            x: 1.0,
-            z: -1.4
-          }];
-          wheelPositions.forEach(pos => {
-            const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-            wheel.rotation.z = Math.PI / 2;
-            wheel.position.set(pos.x, 0.28, pos.z);
-            wheel.castShadow = true;
-            car.add(wheel);
-            const rimGeometry = new THREE.CylinderGeometry(0.18, 0.18, 0.08, 8);
-            const rimMaterial = new THREE.MeshPhongMaterial({
-              color: 0xcccccc,
-              shininess: 150
-            });
-            const rim = new THREE.Mesh(rimGeometry, rimMaterial);
-            rim.rotation.z = Math.PI / 2;
-            rim.position.set(pos.x, 0.28, pos.z);
-            car.add(rim);
-            const hubGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 6);
-            const hubMaterial = new THREE.MeshPhongMaterial({
-              color: 0xffcc00,
-              shininess: 200
-            });
-            const hub = new THREE.Mesh(hubGeometry, hubMaterial);
-            hub.rotation.z = Math.PI / 2;
-            hub.position.set(pos.x, 0.28, pos.z);
-            car.add(hub);
-          });
-          const headlightGeometry = new THREE.SphereGeometry(0.08, 12, 12);
-          const headlightMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffffaa,
-            emissive: 0x444400,
-            shininess: 300
-          });
-          const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
-          const rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
-          leftHeadlight.position.set(-0.6, 0.35, 1.9);
-          rightHeadlight.position.set(0.6, 0.35, 1.9);
-          car.add(leftHeadlight);
-          car.add(rightHeadlight);
-          const taillightMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff4444,
-            emissive: 0x440000,
-            shininess: 300
-          });
-          const leftTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
-          const rightTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
-          leftTaillight.position.set(-0.6, 0.35, -1.9);
-          rightTaillight.position.set(0.6, 0.35, -1.9);
-          car.add(leftTaillight);
-          car.add(rightTaillight);
-          if (type === 'truck') {
-            const bedGeometry = new THREE.BoxGeometry(1.8, 0.3, 1.5);
-            const bedMaterial = new THREE.MeshPhongMaterial({
-              color: color,
-              shininess: 60
-            });
-            const bed = new THREE.Mesh(bedGeometry, bedMaterial);
-            bed.position.y = 0.5;
-            bed.position.z = -1.2;
-            bed.castShadow = true;
-            car.add(bed);
-          }
-          car.visible = false;
-          garagePlatform.add(car);
-          return car;
-        }
+      function createGarageCar(color, type) {
+  const car = new THREE.Group();
+  
+  // Основні параметри залежно від типу
+  let bodyGeometry, bodyHeight, bodyWidth, bodyLength;
+  let roofHeight, roofWidth, roofLength, roofOffsetZ;
+  
+  switch (type) {
+    case 'sports':
+      bodyWidth = 1.8; bodyHeight = 0.5; bodyLength = 3.8;
+      roofHeight = 0.3; roofWidth = 1.4; roofLength = 1.8; roofOffsetZ = 0.2;
+      break;
+    case 'suv':
+      bodyWidth = 2.0; bodyHeight = 1.0; bodyLength = 4.2;
+      roofHeight = 0.5; roofWidth = 1.8; roofLength = 2.5; roofOffsetZ = 0.3;
+      break;
+    case 'sedan':
+      bodyWidth = 1.9; bodyHeight = 0.7; bodyLength = 4.0;
+      roofHeight = 0.4; roofWidth = 1.6; roofLength = 2.2; roofOffsetZ = 0.3;
+      break;
+    case 'truck':
+      bodyWidth = 2.2; bodyHeight = 0.9; bodyLength = 3.5;
+      roofHeight = 0.45; roofWidth = 1.7; roofLength = 2.0; roofOffsetZ = 0.5;
+      break;
+    default:
+      bodyWidth = 1.8; bodyHeight = 0.6; bodyLength = 3.8;
+      roofHeight = 0.4; roofWidth = 1.6; roofLength = 2.2; roofOffsetZ = 0.3;
+  }
+  
+  bodyGeometry = new THREE.BoxGeometry(bodyWidth, bodyHeight, bodyLength);
+  const bodyMaterial = new THREE.MeshPhongMaterial({
+    color: color,
+    shininess: 100,
+    specular: 0x222222
+  });
+  const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+  body.position.y = 0.4;
+  body.castShadow = true;
+  car.add(body);
+  
+  // Додаткові деталі кузова
+  // Бічні панелі з рельєфом
+  const sidePanelGeometry = new THREE.BoxGeometry(0.05, bodyHeight * 0.3, bodyLength * 0.6);
+  const sidePanelMaterial = new THREE.MeshPhongMaterial({
+    color: new THREE.Color(color).multiplyScalar(0.9),
+    shininess: 120
+  });
+  
+  const leftPanel = new THREE.Mesh(sidePanelGeometry, sidePanelMaterial);
+  leftPanel.position.set(-bodyWidth / 2 - 0.02, 0.35, 0);
+  car.add(leftPanel);
+  
+  const rightPanel = new THREE.Mesh(sidePanelGeometry, sidePanelMaterial);
+  rightPanel.position.set(bodyWidth / 2 + 0.02, 0.35, 0);
+  car.add(rightPanel);
+  
+  // Нижня частина бампера спереду
+  const frontBumperGeometry = new THREE.BoxGeometry(bodyWidth * 0.9, 0.15, 0.3);
+  const bumperMaterial = new THREE.MeshPhongMaterial({
+    color: new THREE.Color(color).multiplyScalar(0.85),
+    shininess: 90
+  });
+  const frontBumper = new THREE.Mesh(frontBumperGeometry, bumperMaterial);
+  frontBumper.position.set(0, 0.15, bodyLength / 2 + 0.15);
+  frontBumper.castShadow = true;
+  car.add(frontBumper);
+  
+  // Задній бампер
+  const rearBumper = new THREE.Mesh(frontBumperGeometry, bumperMaterial);
+  rearBumper.position.set(0, 0.15, -bodyLength / 2 - 0.15);
+  rearBumper.castShadow = true;
+  car.add(rearBumper);
+  
+  // Решітка радіатора
+  const grilleGeometry = new THREE.BoxGeometry(bodyWidth * 0.6, 0.25, 0.08);
+  const grilleMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a,
+    shininess: 50
+  });
+  const grille = new THREE.Mesh(grilleGeometry, grilleMaterial);
+  grille.position.set(0, 0.35, bodyLength / 2 + 0.04);
+  car.add(grille);
+  
+  // Деталі решітки (горизонтальні лінії)
+  for (let i = 0; i < 4; i++) {
+    const lineGeometry = new THREE.BoxGeometry(bodyWidth * 0.55, 0.02, 0.01);
+    const lineMaterial = new THREE.MeshPhongMaterial({
+      color: 0x333333,
+      shininess: 100
+    });
+    const line = new THREE.Mesh(lineGeometry, lineMaterial);
+    line.position.set(0, 0.28 + i * 0.05, bodyLength / 2 + 0.09);
+    car.add(line);
+  }
+  
+  // Капот з рельєфом
+  const hoodLineGeometry = new THREE.BoxGeometry(0.03, 0.02, bodyLength * 0.35);
+  const hoodLineMaterial = new THREE.MeshPhongMaterial({
+    color: new THREE.Color(color).multiplyScalar(0.95),
+    shininess: 110
+  });
+  const hoodLineLeft = new THREE.Mesh(hoodLineGeometry, hoodLineMaterial);
+  hoodLineLeft.position.set(-0.3, bodyHeight + 0.01, bodyLength * 0.25);
+  car.add(hoodLineLeft);
+  
+  const hoodLineRight = new THREE.Mesh(hoodLineGeometry, hoodLineMaterial);
+  hoodLineRight.position.set(0.3, bodyHeight + 0.01, bodyLength * 0.25);
+  car.add(hoodLineRight);
+  
+  // Дах
+  const roofGeometry = new THREE.BoxGeometry(roofWidth, roofHeight, roofLength);
+  const roofMaterial = new THREE.MeshPhongMaterial({
+    color: color,
+    shininess: 80
+  });
+  const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+  roof.position.y = bodyHeight + roofHeight / 2;
+  roof.position.z = roofOffsetZ;
+  roof.castShadow = true;
+  car.add(roof);
+  
+  // Антена на даху
+  const antennaGeometry = new THREE.CylinderGeometry(0.02, 0.02, 0.3, 8);
+  const antennaMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a,
+    shininess: 50
+  });
+  const antenna = new THREE.Mesh(antennaGeometry, antennaMaterial);
+  antenna.position.set(roofWidth / 2 - 0.1, bodyHeight + roofHeight + 0.15, roofOffsetZ - roofLength / 3);
+  car.add(antenna);
+  
+  // Вікна
+  const windowGeometry = new THREE.BoxGeometry(roofWidth - 0.1, roofHeight - 0.05, roofLength - 0.2);
+  const windowMaterial = new THREE.MeshPhongMaterial({
+    color: 0x87ceeb,
+    transparent: true,
+    opacity: 0.7,
+    shininess: 200
+  });
+  const windows = new THREE.Mesh(windowGeometry, windowMaterial);
+  windows.position.y = bodyHeight + roofHeight / 2;
+  windows.position.z = roofOffsetZ;
+  car.add(windows);
+  
+  // Рамки вікон
+  const windowFrameGeometry = new THREE.BoxGeometry(roofWidth + 0.05, 0.03, roofLength + 0.05);
+  const windowFrameMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a,
+    shininess: 100
+  });
+  const windowFrame = new THREE.Mesh(windowFrameGeometry, windowFrameMaterial);
+  windowFrame.position.y = bodyHeight + roofHeight / 2;
+  windowFrame.position.z = roofOffsetZ;
+  car.add(windowFrame);
+  
+  // Дзеркала заднього виду
+  const mirrorGeometry = new THREE.BoxGeometry(0.12, 0.08, 0.15);
+  const mirrorMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a,
+    shininess: 80
+  });
+  
+  const leftMirror = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+  leftMirror.position.set(-bodyWidth / 2 - 0.1, bodyHeight + 0.1, roofOffsetZ + roofLength / 2 - 0.3);
+  car.add(leftMirror);
+  
+  const rightMirror = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+  rightMirror.position.set(bodyWidth / 2 + 0.1, bodyHeight + 0.1, roofOffsetZ + roofLength / 2 - 0.3);
+  car.add(rightMirror);
+  
+  // Скло дзеркал
+  const mirrorGlassGeometry = new THREE.BoxGeometry(0.1, 0.07, 0.02);
+  const mirrorGlassMaterial = new THREE.MeshPhongMaterial({
+    color: 0xaaaaff,
+    shininess: 300,
+    transparent: true,
+    opacity: 0.8
+  });
+  
+  const leftMirrorGlass = new THREE.Mesh(mirrorGlassGeometry, mirrorGlassMaterial);
+  leftMirrorGlass.position.set(-bodyWidth / 2 - 0.15, bodyHeight + 0.1, roofOffsetZ + roofLength / 2 - 0.3);
+  car.add(leftMirrorGlass);
+  
+  const rightMirrorGlass = new THREE.Mesh(mirrorGlassGeometry, mirrorGlassMaterial);
+  rightMirrorGlass.position.set(bodyWidth / 2 + 0.15, bodyHeight + 0.1, roofOffsetZ + roofLength / 2 - 0.3);
+  car.add(rightMirrorGlass);
+  
+  // Колеса з більшою деталізацією
+  const wheelGeometry = new THREE.CylinderGeometry(0.28, 0.28, 0.18, 16);
+  const wheelMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a
+  });
+  
+  const wheelPositions = [
+    { x: -bodyWidth / 2 - 0.1, z: bodyLength / 2 - 0.5 },
+    { x: bodyWidth / 2 + 0.1, z: bodyLength / 2 - 0.5 },
+    { x: -bodyWidth / 2 - 0.1, z: -bodyLength / 2 + 0.5 },
+    { x: bodyWidth / 2 + 0.1, z: -bodyLength / 2 + 0.5 }
+  ];
+  
+  wheelPositions.forEach(pos => {
+    // Шина
+    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+    wheel.rotation.z = Math.PI / 2;
+    wheel.position.set(pos.x, 0.28, pos.z);
+    wheel.castShadow = true;
+    car.add(wheel);
+    
+    // Диск
+    const rimGeometry = new THREE.CylinderGeometry(0.18, 0.18, 0.08, 8);
+    const rimMaterial = new THREE.MeshPhongMaterial({
+      color: 0xcccccc,
+      shininess: 150
+    });
+    const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+    rim.rotation.z = Math.PI / 2;
+    rim.position.set(pos.x, 0.28, pos.z);
+    car.add(rim);
+    
+    // Спиці диска
+    for (let i = 0; i < 5; i++) {
+      const spokeGeometry = new THREE.BoxGeometry(0.03, 0.15, 0.05);
+      const spokeMaterial = new THREE.MeshPhongMaterial({
+        color: 0xaaaaaa,
+        shininess: 180
+      });
+      const spoke = new THREE.Mesh(spokeGeometry, spokeMaterial);
+      spoke.rotation.z = Math.PI / 2;
+      spoke.rotation.y = (Math.PI * 2 / 5) * i;
+      spoke.position.set(pos.x, 0.28, pos.z);
+      car.add(spoke);
+    }
+    
+    // Центральна частина диска
+    const hubGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 6);
+    const hubMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffcc00,
+      shininess: 200
+    });
+    const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+    hub.rotation.z = Math.PI / 2;
+    hub.position.set(pos.x, 0.28, pos.z);
+    car.add(hub);
+    
+    // Гальмівний диск
+    const brakeGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.02, 16);
+    const brakeMaterial = new THREE.MeshPhongMaterial({
+      color: 0x444444,
+      shininess: 100
+    });
+    const brake = new THREE.Mesh(brakeGeometry, brakeMaterial);
+    brake.rotation.z = Math.PI / 2;
+    brake.position.set(pos.x > 0 ? pos.x - 0.05 : pos.x + 0.05, 0.28, pos.z);
+    car.add(brake);
+  });
+  
+  // Фари з більшою деталізацією
+  const headlightGeometry = new THREE.SphereGeometry(0.08, 12, 12);
+  const headlightMaterial = new THREE.MeshPhongMaterial({
+    color: 0xffffaa,
+    emissive: 0x444400,
+    shininess: 300
+  });
+  
+  // Корпус фар
+  const headlightHousingGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.1, 12);
+  const headlightHousingMaterial = new THREE.MeshPhongMaterial({
+    color: 0x333333,
+    shininess: 100
+  });
+  
+  const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+  leftHeadlight.position.set(-bodyWidth / 2 + 0.3, 0.35, bodyLength / 2);
+  car.add(leftHeadlight);
+  
+  const leftHousing = new THREE.Mesh(headlightHousingGeometry, headlightHousingMaterial);
+  leftHousing.rotation.x = Math.PI / 2;
+  leftHousing.position.set(-bodyWidth / 2 + 0.3, 0.35, bodyLength / 2 - 0.05);
+  car.add(leftHousing);
+  
+  const rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+  rightHeadlight.position.set(bodyWidth / 2 - 0.3, 0.35, bodyLength / 2);
+  car.add(rightHeadlight);
+  
+  const rightHousing = new THREE.Mesh(headlightHousingGeometry, headlightHousingMaterial);
+  rightHousing.rotation.x = Math.PI / 2;
+  rightHousing.position.set(bodyWidth / 2 - 0.3, 0.35, bodyLength / 2 - 0.05);
+  car.add(rightHousing);
+  
+  // Задні ліхтарі
+  const taillightMaterial = new THREE.MeshPhongMaterial({
+    color: 0xff4444,
+    emissive: 0x440000,
+    shininess: 300
+  });
+  
+  const taillightHousingMaterial = new THREE.MeshPhongMaterial({
+    color: 0x330000,
+    shininess: 100
+  });
+  
+  const leftTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
+  leftTaillight.position.set(-bodyWidth / 2 + 0.3, 0.35, -bodyLength / 2);
+  car.add(leftTaillight);
+  
+  const leftTailHousing = new THREE.Mesh(headlightHousingGeometry, taillightHousingMaterial);
+  leftTailHousing.rotation.x = Math.PI / 2;
+  leftTailHousing.position.set(-bodyWidth / 2 + 0.3, 0.35, -bodyLength / 2 + 0.05);
+  car.add(leftTailHousing);
+  
+  const rightTaillight = new THREE.Mesh(headlightGeometry, taillightMaterial);
+  rightTaillight.position.set(bodyWidth / 2 - 0.3, 0.35, -bodyLength / 2);
+  car.add(rightTaillight);
+  
+  const rightTailHousing = new THREE.Mesh(headlightHousingGeometry, taillightHousingMaterial);
+  rightTailHousing.rotation.x = Math.PI / 2;
+  rightTailHousing.position.set(bodyWidth / 2 - 0.3, 0.35, -bodyLength / 2 + 0.05);
+  car.add(rightTailHousing);
+  
+  // Вихлопна труба
+  const exhaustGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.25, 12);
+  const exhaustMaterial = new THREE.MeshPhongMaterial({
+    color: 0x444444,
+    shininess: 120
+  });
+  const exhaust = new THREE.Mesh(exhaustGeometry, exhaustMaterial);
+  exhaust.rotation.z = Math.PI / 2;
+  exhaust.position.set(bodyWidth / 2 - 0.3, 0.2, -bodyLength / 2 - 0.1);
+  car.add(exhaust);
+  
+  // Двері (контури)
+  const doorLineGeometry = new THREE.BoxGeometry(0.02, bodyHeight * 0.7, bodyLength * 0.3);
+  const doorLineMaterial = new THREE.MeshPhongMaterial({
+    color: new THREE.Color(color).multiplyScalar(0.8),
+    shininess: 90
+  });
+  
+  // Ліва передня дверь
+  const leftFrontDoor = new THREE.Mesh(doorLineGeometry, doorLineMaterial);
+  leftFrontDoor.position.set(-bodyWidth / 2 - 0.01, 0.4, roofOffsetZ + 0.5);
+  car.add(leftFrontDoor);
+  
+  // Права передня дверь
+  const rightFrontDoor = new THREE.Mesh(doorLineGeometry, doorLineMaterial);
+  rightFrontDoor.position.set(bodyWidth / 2 + 0.01, 0.4, roofOffsetZ + 0.5);
+  car.add(rightFrontDoor);
+  
+  // Ручки дверей
+  const handleGeometry = new THREE.BoxGeometry(0.08, 0.03, 0.2);
+  const handleMaterial = new THREE.MeshPhongMaterial({
+    color: 0x333333,
+    shininess: 150
+  });
+  
+  const leftHandle = new THREE.Mesh(handleGeometry, handleMaterial);
+  leftHandle.position.set(-bodyWidth / 2 - 0.03, 0.45, roofOffsetZ + 0.5);
+  car.add(leftHandle);
+  
+  const rightHandle = new THREE.Mesh(handleGeometry, handleMaterial);
+  rightHandle.position.set(bodyWidth / 2 + 0.03, 0.45, roofOffsetZ + 0.5);
+  car.add(rightHandle);
+  
+  // Спойлер для спортивного авто
+  if (type === 'sports') {
+    const spoilerBaseGeometry = new THREE.BoxGeometry(bodyWidth * 0.8, 0.08, 0.15);
+    const spoilerMaterial = new THREE.MeshPhongMaterial({
+      color: new THREE.Color(color).multiplyScalar(0.9),
+      shininess: 110
+    });
+    const spoilerBase = new THREE.Mesh(spoilerBaseGeometry, spoilerMaterial);
+    spoilerBase.position.set(0, bodyHeight + roofHeight + 0.15, -bodyLength / 2 + 0.3);
+    spoilerBase.rotation.x = -0.2;
+    spoilerBase.castShadow = true;
+    car.add(spoilerBase);
+    
+    // Стійки спойлера
+    const spoilerLegGeometry = new THREE.BoxGeometry(0.05, 0.2, 0.05);
+    const leftSpoilerLeg = new THREE.Mesh(spoilerLegGeometry, spoilerMaterial);
+    leftSpoilerLeg.position.set(-bodyWidth / 3, bodyHeight + roofHeight + 0.05, -bodyLength / 2 + 0.3);
+    car.add(leftSpoilerLeg);
+    
+    const rightSpoilerLeg = new THREE.Mesh(spoilerLegGeometry, spoilerMaterial);
+    rightSpoilerLeg.position.set(bodyWidth / 3, bodyHeight + roofHeight + 0.05, -bodyLength / 2 + 0.3);
+    car.add(rightSpoilerLeg);
+  }
+  
+  // Кузов для пікапа
+  if (type === 'truck') {
+    const bedGeometry = new THREE.BoxGeometry(bodyWidth - 0.4, 0.3, bodyLength * 0.4);
+    const bedMaterial = new THREE.MeshPhongMaterial({
+      color: color,
+      shininess: 60
+    });
+    const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+    bed.position.y = 0.5;
+    bed.position.z = -bodyLength * 0.2;
+    bed.castShadow = true;
+    car.add(bed);
+    
+    // Борти кузова
+    const sideWallGeometry = new THREE.BoxGeometry(0.08, 0.4, bodyLength * 0.4);
+    const sideWallMaterial = new THREE.MeshPhongMaterial({
+      color: new THREE.Color(color).multiplyScalar(0.95),
+      shininess: 70
+    });
+    
+    const leftWall = new THREE.Mesh(sideWallGeometry, sideWallMaterial);
+    leftWall.position.set(-bodyWidth / 2 + 0.3, 0.55, -bodyLength * 0.2);
+    leftWall.castShadow = true;
+    car.add(leftWall);
+    
+    const rightWall = new THREE.Mesh(sideWallGeometry, sideWallMaterial);
+    rightWall.position.set(bodyWidth / 2 - 0.3, 0.55, -bodyLength * 0.2);
+    rightWall.castShadow = true;
+    car.add(rightWall);
+    
+    const backWallGeometry = new THREE.BoxGeometry(bodyWidth - 0.4, 0.4, 0.08);
+    const backWall = new THREE.Mesh(backWallGeometry, sideWallMaterial);
+    backWall.position.set(0, 0.55, -bodyLength * 0.4 - 0.04);
+    backWall.castShadow = true;
+    car.add(backWall);
+  }
+  
+  // Номерний знак спереду
+  const licensePlateGeometry = new THREE.BoxGeometry(0.35, 0.12, 0.02);
+  const licensePlateMaterial = new THREE.MeshPhongMaterial({
+    color: 0xeeeeee,
+    shininess: 80
+  });
+  const frontPlate = new THREE.Mesh(licensePlateGeometry, licensePlateMaterial);
+  frontPlate.position.set(0, 0.2, bodyLength / 2 + 0.31);
+  car.add(frontPlate);
+  
+  // Номерний знак ззаду
+  const rearPlate = new THREE.Mesh(licensePlateGeometry, licensePlateMaterial);
+  rearPlate.position.set(0, 0.2, -bodyLength / 2 - 0.31);
+  car.add(rearPlate);
+  
+  car.visible = false;
+  garagePlatform.add(car);
+  return car;
+}
 
         function createGarageCarOption(carType, index) {
           const option = document.createElement('div');
