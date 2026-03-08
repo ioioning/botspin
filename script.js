@@ -139,7 +139,7 @@
           }
         }
 
-        function selectMap(mapType) {
+        function selectMap(mapType,event) {
           const mapCards = document.querySelectorAll('.map-card');
           mapCards.forEach(card => card.classList.remove('selected'));
           event.target.classList.add('selected');
